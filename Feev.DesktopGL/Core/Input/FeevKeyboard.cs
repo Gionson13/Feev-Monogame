@@ -7,6 +7,9 @@ namespace Feev.DesktopGL.Input
         private static KeyboardState _state = new KeyboardState();
         private static KeyboardState _previousState = new KeyboardState();
 
+        public static bool CapsLock { get { return _state.CapsLock; } }
+        public static bool NumLock { get { return _state.NumLock; } }
+
         /// <summary>
         /// Gets wheter a key is up or not.
         /// </summary>
@@ -45,6 +48,15 @@ namespace Feev.DesktopGL.Input
         public static bool IsKeyJustReleased(Keys key)
         {
             return _state.IsKeyUp(key) && !_previousState.IsKeyUp(key);
+        }
+
+        /// <summary>
+        /// Gets all the pressed keys.
+        /// </summary>
+        /// <returns>An array with all the pressed keys.</returns>
+        public static Keys[] GetPressedKeys()
+        {
+            return _state.GetPressedKeys();
         }
 
         internal static void Update()
