@@ -43,7 +43,8 @@ namespace Feev.DesktopGL.Graphics
         /// <param name="colorMask">A color mask.</param>
         public void Draw(Color colorMask)
         {
-            Globals.spriteBatch.Draw(Texture, Transform.Position, SourceRectangle, colorMask, Transform.Rotation, Origin, Transform.Scale, SpriteEffects.None, 0f);
+            Batch.Draw(Texture, Transform.Position, SourceRectangle, colorMask, Transform.Rotation, Origin, Transform.Scale, SpriteEffects.None, 0f);
+            //Globals.spriteBatch.Draw(Texture, Transform.Position, SourceRectangle, colorMask, Transform.Rotation, Origin, Transform.Scale, SpriteEffects.None, 0f);
         }
 
         #endregion

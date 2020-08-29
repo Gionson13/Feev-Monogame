@@ -72,7 +72,8 @@ namespace Feev.DesktopGL.Graphics
         /// <param name="colorMask">A color mask.</param>
         public void Draw(Color colorMask)
         {
-            Globals.spriteBatch.Draw(_currentAnimation.SpriteSheet, Transform.Position, _currentAnimation.Frames[frameIndex], colorMask, Transform.Rotation, Origin, Transform.Scale, SpriteEffects.None, 0f);
+            Batch.Draw(_currentAnimation.SpriteSheet, Transform.Position, _currentAnimation.Frames[frameIndex], colorMask, Transform.Rotation, Origin, Transform.Scale, SpriteEffects.None, 0f);
+            //Globals.spriteBatch.Draw(_currentAnimation.SpriteSheet, Transform.Position, _currentAnimation.Frames[frameIndex], colorMask, Transform.Rotation, Origin, Transform.Scale, SpriteEffects.None, 0f);
         }
 
         #endregion
@@ -91,6 +92,7 @@ namespace Feev.DesktopGL.Graphics
                 _currentAnimation = _animations[animation];
                 _elapsedTime = 0f;
                 frameIndex = 0;
+                paused = false;
             }
             else
                 throw new KeyNotFoundException($"{animation} does not exist");
