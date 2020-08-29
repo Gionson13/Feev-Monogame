@@ -1,0 +1,4 @@
+Source File,Dest File,Processor Type,Content Type,Source File Size,Dest File Size,Build Seconds
+"C:/Dev/Feev/Monogame/SandBox/SandBox2D.DesktopGL/Content/file.xml","C:\Dev\Feev\Monogame\SandBox\SandBox2D.DesktopGL\Content\bin\DesktopGL\Content\file.xml","CopyItem","File",610,610,0.010239
+"C:/Dev/Feev/Monogame/SandBox/SandBox2D.DesktopGL/Content/Font.spritefont","C:/Dev/Feev/Monogame/SandBox/SandBox2D.DesktopGL/Content/bin/DesktopGL/Content/Font.xnb","FontDescriptionProcessor","SpriteFontContent",2008,136226,0.336616
+"C:/Dev/Feev/Monogame/SandBox/SandBox2D.DesktopGL/Content/scarfy.png","C:/Dev/Feev/Monogame/SandBox/SandBox2D.DesktopGL/Content/bin/DesktopGL/Content/scarfy.xnb","TextureProcessor","Texture2DContent",10394,393301,0.2253863

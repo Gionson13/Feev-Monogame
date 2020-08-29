@@ -1,0 +1,10 @@
+<AnimationGroup>
+    <Animation name="name" frame_duration="0">
+        <SpriteSheet filename="filename"/>
+        <Frame x="" y="" width="" height=""/>
+    </Animation>
+    <Animation name="name" frame_duration="0">
+        <SpriteSheet filename="filename"/>
+        <Frame x="" y="" width="" height=""/>
+    </Animation>
+</AnimationGroup>
