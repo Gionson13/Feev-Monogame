@@ -1,13 +1,23 @@
 ﻿using Feev.DesktopGL.Utils;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 using System.Text;
 
 namespace Feev.DesktopGL.Graphics
 {
     public static class Batch
     {
-        private static Camera2D _camera2D = null;
+        #region Begin Options
+
+        private static SpriteSortMode _sortMode;
+        private static BlendState _blendState;
+        private static SamplerState _samplerState;
+        private static DepthStencilState _depthStencilState;
+        private static RasterizerState _rasterizerState;
+        private static Effect _effect;
+
+        #endregion
 
         /// <summary>
         /// Begins a new sprite and text batch with the specified render state.
@@ -31,6 +41,13 @@ namespace Feev.DesktopGL.Graphics
         /// <remarks>This method uses optional parameters.</remarks>
         public static void Begin(SpriteSortMode sortMode = SpriteSortMode.Deferred, BlendState blendState = null, SamplerState samplerState = null, DepthStencilState depthStencilState = null, RasterizerState rasterizerState = null, Effect effect = null, Matrix? transformMatrix = null)
         {
+            _sortMode = sortMode;
+            _blendState = blendState;
+            _samplerState = samplerState;
+            _depthStencilState = depthStencilState;
+            _rasterizerState = rasterizerState;
+            _effect = effect;
+
             Globals.spriteBatch.Begin(sortMode, blendState, samplerState, depthStencilState, rasterizerState, effect, transformMatrix);
         }
 
@@ -40,7 +57,8 @@ namespace Feev.DesktopGL.Graphics
         /// <param name="camera">The camera.</param>
         public static void BeginMode2D(Camera2D camera)
         {
-            _camera2D = camera;
+            Globals.spriteBatch.End();
+            Globals.spriteBatch.Begin(_sortMode, _blendState, _samplerState, _depthStencilState, _rasterizerState, _effect, camera.TranslationMatrix);
         }
 
         /// <summary>
@@ -51,9 +69,7 @@ namespace Feev.DesktopGL.Graphics
         /// <param name="color">A color mask.</param>
         public static void Draw(Texture2D texture, Rectangle destinationRectangle, Color color)
         {
-            destinationRectangle = UpdateForCamera2D(destinationRectangle);
-
-            Globals.spriteBatch.Draw(texture, destinationRectangle, color);
+            Draw(texture, destinationRectangle, null, color, 0f, Vector2.Zero, SpriteEffects.None, 0f);
         }
 
         /// <summary>
@@ -65,9 +81,7 @@ namespace Feev.DesktopGL.Graphics
         /// <param name="color">A color mask.</param>
         public static void Draw(Texture2D texture, Vector2 position, Color color)
         {
-            position = UpdateForCamera2D(position);
-
-            Globals.spriteBatch.Draw(texture, position, color);
+            Draw(texture, position, null, color, 0f, Vector2.Zero, Vector2.One, SpriteEffects.None, 0f);
         }
 
         /// <summary>
@@ -80,9 +94,7 @@ namespace Feev.DesktopGL.Graphics
         /// <param name="color">A color mask.</param>
         public static void Draw(Texture2D texture, Vector2 position, Rectangle? sourceRectangle, Color color)
         {
-            position = UpdateForCamera2D(position);
-
-            Globals.spriteBatch.Draw(texture, position, sourceRectangle, color);
+            Draw(texture, position, sourceRectangle, color, 0f, Vector2.Zero, Vector2.One, SpriteEffects.None, 0f);
         }
 
         /// <summary>
@@ -95,11 +107,9 @@ namespace Feev.DesktopGL.Graphics
         /// <param name="color">A color mask.</param>
         public static void Draw(Texture2D texture, Rectangle destinationRectangle, Rectangle? sourceRectangle, Color color)
         {
-            destinationRectangle = UpdateForCamera2D(destinationRectangle);
-
-            Globals.spriteBatch.Draw(texture, destinationRectangle, sourceRectangle, color);
+            Draw(texture, destinationRectangle, sourceRectangle, color, 0f, Vector2.Zero, SpriteEffects.None, 0f);
         }
-        
+
         /// <summary>
         /// Submit a sprite for drawing in the current batch.
         /// </summary>
@@ -115,11 +125,9 @@ namespace Feev.DesktopGL.Graphics
         /// <param name="layerDepth">A depth of the layer of this sprite.</param>
         public static void Draw(Texture2D texture, Vector2 position, Rectangle? sourceRectangle, Color color, float rotation, Vector2 origin, float scale, SpriteEffects effects, float layerDepth)
         {
-            position = UpdateForCamera2D(position);
-
-            Globals.spriteBatch.Draw(texture, position, sourceRectangle, color, rotation, origin, scale, effects, layerDepth);
+            Draw(texture, position, sourceRectangle, color, rotation, origin, new Vector2(scale), effects, layerDepth);
         }
-       
+
         /// <summary>
         /// Submit a sprite for drawing in the current batch.
         /// </summary>
@@ -135,11 +143,9 @@ namespace Feev.DesktopGL.Graphics
         /// <param name="layerDepth">A depth of the layer of this sprite.</param>
         public static void Draw(Texture2D texture, Vector2 position, Rectangle? sourceRectangle, Color color, float rotation, Vector2 origin, Vector2 scale, SpriteEffects effects, float layerDepth)
         {
-            position = UpdateForCamera2D(position);
-
             Globals.spriteBatch.Draw(texture, position, sourceRectangle, color, rotation, origin, scale, effects, layerDepth);
         }
-        
+
         /// <summary>
         /// Submit a sprite for drawing in the current batch.
         /// </summary>
@@ -154,9 +160,6 @@ namespace Feev.DesktopGL.Graphics
         /// <param name="layerDepth">A depth of the layer of this sprite.</param>
         public static void Draw(Texture2D texture, Rectangle destinationRectangle, Rectangle? sourceRectangle, Color color, float rotation, Vector2 origin, SpriteEffects effects, float layerDepth)
         {
-            destinationRectangle = UpdateForCamera2D(destinationRectangle);
-
-
             Globals.spriteBatch.Draw(texture, destinationRectangle, sourceRectangle, color, rotation, origin, effects, layerDepth);
         }
 
@@ -174,11 +177,9 @@ namespace Feev.DesktopGL.Graphics
         /// <param name="layerDepth">A depth of the layer of this string.</param>
         public static void DrawString(SpriteFont spriteFont, StringBuilder text, Vector2 position, Color color, float rotation, Vector2 origin, Vector2 scale, SpriteEffects effects, float layerDepth)
         {
-            position = UpdateForCamera2D(position);
-
             Globals.spriteBatch.DrawString(spriteFont, text, position, color, rotation, origin, scale, effects, layerDepth);
         }
-        
+
         /// <summary>
         /// Submit a text string of sprites for drawing in the current batch.
         /// </summary>
@@ -188,9 +189,7 @@ namespace Feev.DesktopGL.Graphics
         /// <param name="color">A color mask.</param>
         public static void DrawString(SpriteFont spriteFont, string text, Vector2 position, Color color)
         {
-            position = UpdateForCamera2D(position);
-
-            Globals.spriteBatch.DrawString(spriteFont, text, position, color);
+            DrawString(spriteFont, text, position, color, 0f, Vector2.Zero, Vector2.One, SpriteEffects.None, 0f);
         }
 
         /// <summary>
@@ -207,9 +206,7 @@ namespace Feev.DesktopGL.Graphics
         /// <param name="layerDepth">A depth of the layer of this string.</param>
         public static void DrawString(SpriteFont spriteFont, string text, Vector2 position, Color color, float rotation, Vector2 origin, float scale, SpriteEffects effects, float layerDepth)
         {
-            position = UpdateForCamera2D(position);
-
-            Globals.spriteBatch.DrawString(spriteFont, text, position, color, rotation, origin, scale, effects, layerDepth);
+            DrawString(spriteFont, text, position, color, rotation, origin, new Vector2(scale), effects, layerDepth);
         }
 
         /// <summary>
@@ -226,11 +223,9 @@ namespace Feev.DesktopGL.Graphics
         /// <param name="layerDepth">A depth of the layer of this string.</param>
         public static void DrawString(SpriteFont spriteFont, string text, Vector2 position, Color color, float rotation, Vector2 origin, Vector2 scale, SpriteEffects effects, float layerDepth)
         {
-            position = UpdateForCamera2D(position);
-
             Globals.spriteBatch.DrawString(spriteFont, text, position, color, rotation, origin, scale, effects, layerDepth);
         }
-        
+
         /// <summary>
         /// Submit a text string of sprites for drawing in the current batch.
         /// </summary>
@@ -240,9 +235,7 @@ namespace Feev.DesktopGL.Graphics
         /// <param name="color">A color mask.</param>
         public static void DrawString(SpriteFont spriteFont, StringBuilder text, Vector2 position, Color color)
         {
-            position = UpdateForCamera2D(position);
-
-            Globals.spriteBatch.DrawString(spriteFont, text, position, color);
+            DrawString(spriteFont, text, position, color, 0f, Vector2.Zero, Vector2.One, SpriteEffects.None, 0f);
         }
 
         /// <summary>
@@ -259,9 +252,7 @@ namespace Feev.DesktopGL.Graphics
         /// <param name="layerDepth">A depth of the layer of this string.</param>
         public static void DrawString(SpriteFont spriteFont, StringBuilder text, Vector2 position, Color color, float rotation, Vector2 origin, float scale, SpriteEffects effects, float layerDepth)
         {
-            position = UpdateForCamera2D(position);
-
-            Globals.spriteBatch.DrawString(spriteFont, text, position, color, rotation, origin, scale, effects, layerDepth);
+            DrawString(spriteFont, text, position, color, rotation, origin, new Vector2(scale), effects, layerDepth);
         }
 
         /// <summary>
@@ -279,28 +270,8 @@ namespace Feev.DesktopGL.Graphics
         /// </summary>
         public static void EndMode2D()
         {
-            _camera2D = null;
-        }
-
-        private static Vector2 UpdateForCamera2D(Vector2 position)
-        {
-            if (!(_camera2D is null))
-            {
-                position -= _camera2D.Position - _camera2D.Origin;
-            }
-
-            return position;
-        }
-
-        private static Rectangle UpdateForCamera2D(Rectangle destinationRectangle)
-        {
-            if (!(_camera2D is null))
-            {
-                destinationRectangle.X -= (int)(_camera2D.Position.X - _camera2D.Origin.Y);
-                destinationRectangle.Y -= (int)(_camera2D.Position.Y - _camera2D.Origin.Y);
-            }
-
-            return destinationRectangle;
+            Globals.spriteBatch.End();
+            Globals.spriteBatch.Begin(_sortMode, _blendState, _samplerState, _depthStencilState, _rasterizerState, _effect);
         }
     }
 }

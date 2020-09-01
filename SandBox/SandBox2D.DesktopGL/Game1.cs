@@ -6,7 +6,6 @@ using Feev.DesktopGL.Input;
 using Feev.DesktopGL.Utils;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 using System;
 
 namespace SandBox2D.DesktopGL
@@ -14,7 +13,7 @@ namespace SandBox2D.DesktopGL
     public class Game1 : GameScreen
     {
         SpriteFont font;
-        Color clearColor = Color.Red;
+        Color clearColor = Color.Black;
         AnimatedSprite animatedSprite;
         AnimatedSprite animatedSprite2;
         Sprite sprite;
@@ -48,7 +47,7 @@ namespace SandBox2D.DesktopGL
 
         protected override void OnUpdate(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || FeevKeyboard.IsKeyDown(Keys.Escape))
+            if (/*GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed ||*/ FeevKeyboard.IsKeyDown(FeevKeys.Escape))
                 Exit();
 
             if (FeevMouse.IsButtonDown(MouseButtons.XButton1))
@@ -60,17 +59,27 @@ namespace SandBox2D.DesktopGL
                 clearColor = new Color(r, g, b);
             }
 
-            if (FeevKeyboard.IsKeyDown(Keys.A))
+            if (FeevKeyboard.IsKeyDown(FeevKeys.A))
                 animatedSprite.Transform.Position.X -= speed * gameTime.GetElapsedSeconds();
-            if (FeevKeyboard.IsKeyDown(Keys.D))
+            if (FeevKeyboard.IsKeyDown(FeevKeys.D))
                 animatedSprite.Transform.Position.X += speed * gameTime.GetElapsedSeconds();
 
-            if (FeevKeyboard.IsKeyDown(Keys.W))
+            if (FeevKeyboard.IsKeyDown(FeevKeys.W))
                 animatedSprite.Transform.Position.Y -= speed * gameTime.GetElapsedSeconds();
-            if (FeevKeyboard.IsKeyDown(Keys.S))
+            if (FeevKeyboard.IsKeyDown(FeevKeys.S))
                 animatedSprite.Transform.Position.Y += speed * gameTime.GetElapsedSeconds();
 
+            if (FeevKeyboard.IsKeyDown(FeevKeys.Q))
+                camera.Rotation -= gameTime.GetElapsedSeconds();
+            if (FeevKeyboard.IsKeyDown(FeevKeys.E))
+                camera.Rotation += gameTime.GetElapsedSeconds();
+
+            if (FeevKeyboard.GetPressedKeys().Length > 0)
+                Log.Warning(FeevKeyboard.GetPressedKeys()[0]);
+
             camera.Position += (animatedSprite.Transform.Position - camera.Position) / 10;
+            camera.Zoom += MathHelper.Lerp(0, 1, FeevMouse.ScrollWheelValue * gameTime.GetElapsedSeconds() / 15);
+            camera.Zoom = Math.Clamp(camera.Zoom, 0, float.PositiveInfinity);
 
             animatedSprite.Update(gameTime);
             animatedSprite2.Update(gameTime);
@@ -82,10 +91,12 @@ namespace SandBox2D.DesktopGL
 
             Batch.Begin(samplerState: SamplerState.PointClamp);
             Batch.BeginMode2D(camera);
-            animatedSprite.Draw();
-            animatedSprite2.Draw();
             sprite.Draw();
+            animatedSprite2.Draw();
+            animatedSprite.Draw();
             Batch.EndMode2D();
+            Batch.DrawString(font, FeevMouse.TotalScrollWheelValue.ToString(), Vector2.Zero, Color.White);
+            Batch.DrawString(font, camera.Zoom.ToString(), new Vector2(0, 50), Color.White);
             Batch.End();
         }
     }
