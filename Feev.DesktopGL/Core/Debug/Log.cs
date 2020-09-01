@@ -16,7 +16,7 @@ namespace Feev.DesktopGL.Debug
             Console.ResetColor();
         }
 
-        public static void Warnint(object message)
+        public static void Warning(object message)
         {
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine($"[{DateTime.Now}]: {message}");
