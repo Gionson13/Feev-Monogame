@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.30413.136
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Feev.DesktopGL", "Feev.DesktopGL\Feev.DesktopGL.csproj", "{FFEDA04F-2BEE-4215-B00F-856B79388DB1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SandBox2D.DesktopGL", "SandBox\SandBox2D.DesktopGL\SandBox2D.DesktopGL.csproj", "{69235EBA-018D-4E3F-9886-AE7D01F6CC60}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SandBox2D.DesktopGL", "SandBox\SandBox2D.DesktopGL\SandBox2D.DesktopGL.csproj", "{69235EBA-018D-4E3F-9886-AE7D01F6CC60}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

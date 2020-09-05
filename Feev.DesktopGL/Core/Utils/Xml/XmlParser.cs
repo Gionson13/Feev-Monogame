@@ -14,7 +14,7 @@ namespace Feev.DesktopGL.Utils.Xml
             List<XmlAnimationResult> xmlAnimations = new List<XmlAnimationResult>();
 
             XmlNode animationGroup = xmlDocument.ChildNodes[0];
-            if (animationGroup.Name == "AnimationGroup")
+            if (animationGroup.Name == "AnimatedSprite")
             {
                 foreach (XmlNode animationNode in animationGroup.ChildNodes)
                 {

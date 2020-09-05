@@ -2,6 +2,7 @@
 using Feev.DesktopGL.Debug;
 using Feev.DesktopGL.Extension;
 using Feev.DesktopGL.Graphics;
+using Feev.DesktopGL.Graphics.UI;
 using Feev.DesktopGL.Input;
 using Feev.DesktopGL.Utils;
 using Microsoft.Xna.Framework;
@@ -18,6 +19,7 @@ namespace SandBox2D.DesktopGL
         AnimatedSprite animatedSprite2;
         Sprite sprite;
         Camera2D camera;
+        Button button;
         float speed = 400;
 
         public Game1()
@@ -41,6 +43,10 @@ namespace SandBox2D.DesktopGL
             animatedSprite2 = Globals.content.LoadAnimatedSprite("file", new Vector2(Globals.graphics.PreferredBackBufferWidth / 2 + spriteSheet.Width / 6, 0));
             animatedSprite2.Origin = new Vector2(spriteSheet.Width / 6 / 2, 0);
             animatedSprite2.Play("not_idle");
+            button = new Button(new Vector2(20, 20),
+                Globals.content.Load<Texture2D>("NormalButton"),
+                Globals.content.Load<Texture2D>("HoverButton"),
+                Globals.content.Load<Texture2D>("PressedButton"));
 
             Log.Info(animatedSprite);
         }
@@ -79,10 +85,11 @@ namespace SandBox2D.DesktopGL
 
             camera.Position += (animatedSprite.Transform.Position - camera.Position) / 10;
             camera.Zoom += MathHelper.Lerp(0, 1, FeevMouse.ScrollWheelValue * gameTime.GetElapsedSeconds() / 15);
-            camera.Zoom = Math.Clamp(camera.Zoom, 0, float.PositiveInfinity);
+            camera.Zoom = Math.Clamp(camera.Zoom, 0.01f, float.PositiveInfinity);
 
             animatedSprite.Update(gameTime);
             animatedSprite2.Update(gameTime);
+            button.Update();
         }
 
         protected override void OnDraw()
@@ -95,8 +102,9 @@ namespace SandBox2D.DesktopGL
             animatedSprite2.Draw();
             animatedSprite.Draw();
             Batch.EndMode2D();
-            Batch.DrawString(font, FeevMouse.TotalScrollWheelValue.ToString(), Vector2.Zero, Color.White);
-            Batch.DrawString(font, camera.Zoom.ToString(), new Vector2(0, 50), Color.White);
+            button.Draw();
+            //Batch.DrawString(font, FeevMouse.TotalScrollWheelValue.ToString(), Vector2.Zero, Color.White);
+            //Batch.DrawString(font, camera.Zoom.ToString(), new Vector2(0, 50), Color.White);
             Batch.End();
         }
     }
