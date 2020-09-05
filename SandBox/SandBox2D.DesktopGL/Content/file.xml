@@ -1,4 +1,4 @@
-<AnimationGroup>
+<AnimatedSprite>
     <Animation name="idle" frame_duration="0.2">
         <SpriteSheet filename="scarfy"/>
         <Frame x="0" y="0" width="128" height="128"/>
@@ -11,4 +11,4 @@
 	<Animation name="not_idle" frame_duration="0.2">
 		<SpriteSheet filename="scarfy" number_of_frames="6"/>
 	</Animation>
-</AnimationGroup>
+</AnimatedSprite>
