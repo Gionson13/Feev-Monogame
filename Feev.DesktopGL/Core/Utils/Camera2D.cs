@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using System.Net.NetworkInformation;
 
 namespace Feev.DesktopGL.Utils
 {
@@ -8,6 +9,18 @@ namespace Feev.DesktopGL.Utils
         public float Rotation;
         public float Zoom;
         public Vector2 Origin;
+        public Rectangle Bounds
+        {
+            get
+            {
+                Vector2 viewPortCorner = ScreenToWorld(new Vector2(0, 0));
+                Vector2 viewPortBottomCorner = ScreenToWorld(new Vector2(Globals.graphics.GraphicsDevice.Viewport.Width,
+                    Globals.graphics.GraphicsDevice.Viewport.Height));
+
+                return new Rectangle(viewPortCorner.ToPoint(), (viewPortBottomCorner - viewPortCorner).ToPoint());
+            }
+        }
+
 
         internal Matrix TranslationMatrix
         {
@@ -15,7 +28,7 @@ namespace Feev.DesktopGL.Utils
             {
                 return Matrix.CreateTranslation(new Vector3(-Position, 0)) *
                     Matrix.CreateRotationZ(Rotation) *
-                    Matrix.CreateScale(Zoom) * 
+                    Matrix.CreateScale(Zoom) *
                     Matrix.CreateTranslation(new Vector3(Origin, 0));
             }
         }
@@ -43,6 +56,16 @@ namespace Feev.DesktopGL.Utils
             Rotation = rotation;
             Zoom = zoom;
             Origin = origin;
+        }
+
+        public Vector2 ScreenToWorld(Vector2 pixel)
+        {
+            return Vector2.Transform(pixel, Matrix.Invert(TranslationMatrix));
+        }
+
+        public Vector2 WorldToScreen(Vector2 worldPosition)
+        {
+            return Vector2.Transform(worldPosition, TranslationMatrix);
         }
 
     }
