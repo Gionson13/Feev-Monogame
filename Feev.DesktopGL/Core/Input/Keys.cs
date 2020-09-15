@@ -67,11 +67,14 @@ namespace Feev.DesktopGL.Input
         RCtrl = MonoKeys.RightControl,
         LAlt = MonoKeys.LeftAlt,
         RAlt = MonoKeys.RightAlt,
+        LWindows = MonoKeys.LeftWindows,
+        RWindows = MonoKeys.RightWindows,
 
         Period = MonoKeys.OemPeriod,
         Comma = MonoKeys.OemComma,
         Dash = MonoKeys.OemMinus,
         BackSlash = MonoKeys.OemBackslash,
+        OemQuotes = MonoKeys.OemQuotes,
 
         Divide = MonoKeys.Divide,
         Multiply = MonoKeys.Multiply,
@@ -95,6 +98,7 @@ namespace Feev.DesktopGL.Input
         PageDown = MonoKeys.PageDown,
         End = MonoKeys.End,
         Home = MonoKeys.Home,
+        PrintScreen = MonoKeys.PrintScreen,
 
         F1 = MonoKeys.F1,
         F2 = MonoKeys.F2,
@@ -120,5 +124,19 @@ namespace Feev.DesktopGL.Input
 		F22 = MonoKeys.F22,
 		F23 = MonoKeys.F23,
 		F24 = MonoKeys.F24,
+
+
+        Pause = MonoKeys.Pause,
+        Apps = MonoKeys.Apps,
+        Scroll = MonoKeys.Scroll,
+
+        MediaPlayPause = MonoKeys.MediaPlayPause,
+        MediaStop = MonoKeys.MediaStop,
+        MediaNext = MonoKeys.MediaNextTrack,
+        MediaPrevious = MonoKeys.MediaPreviousTrack,
+
+        VolumeUp = MonoKeys.VolumeUp,
+        VolumeDown = MonoKeys.VolumeDown,
+        VolumeMute = MonoKeys.VolumeMute,
     }
 }
