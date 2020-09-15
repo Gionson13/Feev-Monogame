@@ -1,9 +1,11 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
+using MonoMouse = Microsoft.Xna.Framework.Input.Mouse;
+
 namespace Feev.DesktopGL.Input
 {
-    public static class FeevMouse
+    public static class Mouse
     {
         private static MouseState _state = new MouseState();
         private static MouseState _previousState = new MouseState();
@@ -11,7 +13,7 @@ namespace Feev.DesktopGL.Input
         public static Vector2 Position
         {
             get { return _state.Position.ToVector2(); }
-            set { Mouse.SetPosition((int)value.X, (int)value.Y); }
+            set { MonoMouse.SetPosition((int)value.X, (int)value.Y); }
         }
 
         public static int ScrollWheelValue { get { return _state.ScrollWheelValue - _previousState.ScrollWheelValue; } }
@@ -92,7 +94,7 @@ namespace Feev.DesktopGL.Input
         internal static void Update()
         {
             _previousState = _state;
-            _state = Mouse.GetState();
+            _state = MonoMouse.GetState();
         }
     }
 }

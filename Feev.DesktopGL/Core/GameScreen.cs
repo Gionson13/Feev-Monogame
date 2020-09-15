@@ -10,7 +10,7 @@ namespace Feev.DesktopGL
         {
             Globals.graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-            Globals.content = this.Content;
+            Globals.content = Content;
         }
 
         protected sealed override void Initialize()
@@ -28,8 +28,8 @@ namespace Feev.DesktopGL
 
         protected sealed override void Update(GameTime gameTime)
         {
-            FeevKeyboard.Update();
-            FeevMouse.Update();
+            Keyboard.Update();
+            Mouse.Update();
             OnUpdate(gameTime);
             base.Update(gameTime);
         }

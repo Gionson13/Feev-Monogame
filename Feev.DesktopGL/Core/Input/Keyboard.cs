@@ -1,8 +1,11 @@
 ﻿using Microsoft.Xna.Framework.Input;
 
+using MonoKeys = Microsoft.Xna.Framework.Input.Keys;
+using MonoKeyboard = Microsoft.Xna.Framework.Input.Keyboard;
+
 namespace Feev.DesktopGL.Input
 {
-    public static class FeevKeyboard
+    public static class Keyboard
     {
         private static KeyboardState _state = new KeyboardState();
         private static KeyboardState _previousState = new KeyboardState();
@@ -15,9 +18,9 @@ namespace Feev.DesktopGL.Input
         /// </summary>
         /// <param name="key">The key to check.</param>
         /// <returns><c>true</c> if the specified key is not pressed.</returns>
-        public static bool IsKeyUp(FeevKeys key)
+        public static bool IsKeyUp(Keys key)
         {
-            return _state.IsKeyUp((Keys)(int)key);
+            return _state.IsKeyUp((MonoKeys)(int)key);
         }
 
         /// <summary>
@@ -25,9 +28,9 @@ namespace Feev.DesktopGL.Input
         /// </summary>
         /// <param name="key">The key to check.</param>
         /// <returns><c>true</c> if the specified key is pressed.</returns>
-        public static bool IsKeyDown(FeevKeys key)
+        public static bool IsKeyDown(Keys key)
         {
-            return _state.IsKeyDown((Keys)(int)key);
+            return _state.IsKeyDown((MonoKeys)(int)key);
         }
 
         /// <summary>
@@ -35,9 +38,9 @@ namespace Feev.DesktopGL.Input
         /// </summary>
         /// <param name="key">The key to check.</param>
         /// <returns><c>true</c> if the specified key has just been pressed.</returns>
-        public static bool IsKeyJustPressed(FeevKeys key)
+        public static bool IsKeyJustPressed(Keys key)
         {
-            return _state.IsKeyDown((Keys)(int)key) && !_previousState.IsKeyDown((Keys)(int)key);
+            return _state.IsKeyDown((MonoKeys)(int)key) && !_previousState.IsKeyDown((MonoKeys)(int)key);
         }
 
         /// <summary>
@@ -45,22 +48,22 @@ namespace Feev.DesktopGL.Input
         /// </summary>
         /// <param name="key">The key to check.</param>
         /// <returns><c>true</c> if the specified key has just been released.</returns>
-        public static bool IsKeyJustReleased(FeevKeys key)
+        public static bool IsKeyJustReleased(Keys key)
         {
-            return _state.IsKeyUp((Keys)(int)key) && !_previousState.IsKeyUp((Keys)(int)key);
+            return _state.IsKeyUp((MonoKeys)(int)key) && !_previousState.IsKeyUp((MonoKeys)(int)key);
         }
 
         /// <summary>
         /// Gets all the pressed keys.
         /// </summary>
         /// <returns>An array with all the pressed keys.</returns>
-        public static FeevKeys[] GetPressedKeys()
+        public static Keys[] GetPressedKeys()
         {
             var pressedKeys = _state.GetPressedKeys();
-            FeevKeys[] keys = new FeevKeys[pressedKeys.Length];
+            Keys[] keys = new Keys[pressedKeys.Length];
 
             for (int i = 0; i < keys.Length; i++)
-                keys[i] = (FeevKeys)(int)pressedKeys[i];
+                keys[i] = (Keys)(int)pressedKeys[i];
 
             return keys;
         }
@@ -68,7 +71,7 @@ namespace Feev.DesktopGL.Input
         internal static void Update()
         {
             _previousState = _state;
-            _state = Keyboard.GetState();
+            _state = MonoKeyboard.GetState();
         }
     }
 }

@@ -48,15 +48,25 @@ namespace SandBox2D.DesktopGL
                 Globals.content.Load<Texture2D>("HoverButton"),
                 Globals.content.Load<Texture2D>("PressedButton"));
 
+            button.OnClick += delegate
+            {
+                Log.Error("Hello");
+            };
+
+            button.OnReleased += delegate
+            {
+                Log.Info("Hello");
+            };
+
             Log.Info(animatedSprite);
         }
 
         protected override void OnUpdate(GameTime gameTime)
         {
-            if (/*GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed ||*/ FeevKeyboard.IsKeyDown(FeevKeys.Escape))
+            if (/*GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed ||*/ Keyboard.IsKeyDown(Keys.Escape))
                 Exit();
 
-            if (FeevMouse.IsButtonDown(MouseButtons.XButton1))
+            if (Mouse.IsButtonDown(MouseButtons.XButton1))
             {
                 Random random = new Random();
                 float r = random.NextFloat();
@@ -65,26 +75,26 @@ namespace SandBox2D.DesktopGL
                 clearColor = new Color(r, g, b);
             }
 
-            if (FeevKeyboard.IsKeyDown(FeevKeys.A))
+            if (Keyboard.IsKeyDown(Keys.A))
                 animatedSprite.Transform.Position.X -= speed * gameTime.GetElapsedSeconds();
-            if (FeevKeyboard.IsKeyDown(FeevKeys.D))
+            if (Keyboard.IsKeyDown(Keys.D))
                 animatedSprite.Transform.Position.X += speed * gameTime.GetElapsedSeconds();
 
-            if (FeevKeyboard.IsKeyDown(FeevKeys.W))
+            if (Keyboard.IsKeyDown(Keys.W))
                 animatedSprite.Transform.Position.Y -= speed * gameTime.GetElapsedSeconds();
-            if (FeevKeyboard.IsKeyDown(FeevKeys.S))
+            if (Keyboard.IsKeyDown(Keys.S))
                 animatedSprite.Transform.Position.Y += speed * gameTime.GetElapsedSeconds();
 
-            if (FeevKeyboard.IsKeyDown(FeevKeys.Q))
+            if (Keyboard.IsKeyDown(Keys.Q))
                 camera.Rotation -= gameTime.GetElapsedSeconds();
-            if (FeevKeyboard.IsKeyDown(FeevKeys.E))
+            if (Keyboard.IsKeyDown(Keys.E))
                 camera.Rotation += gameTime.GetElapsedSeconds();
 
-            if (FeevKeyboard.GetPressedKeys().Length > 0)
-                Log.Warning(FeevKeyboard.GetPressedKeys()[0]);
+            if (Keyboard.GetPressedKeys().Length > 0)
+                Log.Warning(Keyboard.GetPressedKeys()[0]);
 
             camera.Position += (animatedSprite.Transform.Position - camera.Position) / 10;
-            camera.Zoom += MathHelper.Lerp(0, 1, FeevMouse.ScrollWheelValue * gameTime.GetElapsedSeconds() / 15);
+            camera.Zoom += MathHelper.Lerp(0, 1, Mouse.ScrollWheelValue * gameTime.GetElapsedSeconds() / 15);
             camera.Zoom = Math.Clamp(camera.Zoom, 0.01f, float.PositiveInfinity);
 
             animatedSprite.Update(gameTime);
