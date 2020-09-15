@@ -12,15 +12,25 @@ namespace Feev.DesktopGL.Graphics.UI
         public Texture2D Hover;
         public Texture2D Pressed;
         public Transform2D Transform;
+        public bool IsPressed = false;
+
         public event EventHandler OnClick;
         public event EventHandler OnReleased;
-        public bool IsPressed = false;
 
         private Texture2D _currentTexture;
 
         public Button(Vector2 position, Texture2D normal, Texture2D hover, Texture2D pressed)
         {
             Transform = new Transform2D(position, 0f, Vector2.One);
+            Normal = normal;
+            Hover = hover;
+            Pressed = pressed;
+            _currentTexture = Normal;
+        }
+        
+        public Button(Transform2D transform, Texture2D normal, Texture2D hover, Texture2D pressed)
+        {
+            Transform = transform;
             Normal = normal;
             Hover = hover;
             Pressed = pressed;

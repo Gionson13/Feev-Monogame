@@ -20,6 +20,7 @@ namespace SandBox2D.DesktopGL
         Sprite sprite;
         Camera2D camera;
         Button button;
+        Label label;
         float speed = 400;
 
         public Game1()
@@ -48,6 +49,8 @@ namespace SandBox2D.DesktopGL
                 Globals.content.Load<Texture2D>("HoverButton"),
                 Globals.content.Load<Texture2D>("PressedButton"));
 
+            label = new Label("Hello", font, Color.Red, new Transform2D(new Vector2(20, 60), 0f, Vector2.One));
+
             button.OnClick += delegate
             {
                 Log.Error("Hello");
@@ -57,6 +60,7 @@ namespace SandBox2D.DesktopGL
             {
                 Log.Info("Hello");
             };
+
 
             Log.Info(animatedSprite);
         }
@@ -90,9 +94,6 @@ namespace SandBox2D.DesktopGL
             if (Keyboard.IsKeyDown(Keys.E))
                 camera.Rotation += gameTime.GetElapsedSeconds();
 
-            if (Keyboard.GetPressedKeys().Length > 0)
-                Log.Warning(Keyboard.GetPressedKeys()[0]);
-
             camera.Position += (animatedSprite.Transform.Position - camera.Position) / 10;
             camera.Zoom += MathHelper.Lerp(0, 1, Mouse.ScrollWheelValue * gameTime.GetElapsedSeconds() / 15);
             camera.Zoom = Math.Clamp(camera.Zoom, 0.01f, float.PositiveInfinity);
@@ -100,6 +101,12 @@ namespace SandBox2D.DesktopGL
             animatedSprite.Update(gameTime);
             animatedSprite2.Update(gameTime);
             button.Update();
+
+            if (Keyboard.GetPressedKeys().Length > 0)
+                Log.Print(Keyboard.GetPressedKeys()[0]);
+
+            //if (Microsoft.Xna.Framework.Input.Keyboard.GetState().GetPressedKeys().Length > 0)
+            //    Log.Print(Microsoft.Xna.Framework.Input.Keyboard.GetState().GetPressedKeys()[0]);
         }
 
         protected override void OnDraw()
@@ -113,6 +120,7 @@ namespace SandBox2D.DesktopGL
             animatedSprite.Draw();
             Batch.EndMode2D();
             button.Draw();
+            label.Draw();
             //Batch.DrawString(font, FeevMouse.TotalScrollWheelValue.ToString(), Vector2.Zero, Color.White);
             //Batch.DrawString(font, camera.Zoom.ToString(), new Vector2(0, 50), Color.White);
             Batch.End();
