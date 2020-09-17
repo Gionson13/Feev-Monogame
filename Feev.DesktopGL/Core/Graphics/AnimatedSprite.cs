@@ -73,7 +73,6 @@ namespace Feev.DesktopGL.Graphics
         public void Draw(Color colorMask)
         {
             Batch.Draw(_currentAnimation.SpriteSheet, Transform.Position, _currentAnimation.Frames[frameIndex], colorMask, Transform.Rotation, Origin, Transform.Scale, SpriteEffects.None, 0f);
-            //Globals.spriteBatch.Draw(_currentAnimation.SpriteSheet, Transform.Position, _currentAnimation.Frames[frameIndex], colorMask, Transform.Rotation, Origin, Transform.Scale, SpriteEffects.None, 0f);
         }
 
         #endregion
