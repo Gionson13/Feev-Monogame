@@ -1,9 +1,11 @@
 ﻿using Feev.DesktopGL.Graphics;
+using Feev.DesktopGL.Utils.Json;
 using Feev.DesktopGL.Utils.Xml;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Xml;
 
@@ -72,6 +74,22 @@ namespace Feev.DesktopGL.Extension
             var result = LoadAnimatedSprite(content, filename);
             result.Transform.Position = position;
             return result;
+        }
+
+        /// <summary>
+        /// Load a tilemap
+        /// </summary>
+        /// <param name="content">The content manager.</param>
+        /// <param name="filename">The name of the file.</param>
+        /// <returns>A tilemap.</returns>
+        public static Tilemap LoadTilemap(this ContentManager content, string filename)
+        {
+            string json = File.ReadAllText($"{content.RootDirectory}/{filename}.json");
+            JsonTilemapResult jsonTilemap = JsonParser.ParseTilemap(json);
+
+            Texture2D spriteSheet = content.Load<Texture2D>(jsonTilemap.SpriteSheet);
+
+            return new Tilemap(spriteSheet, jsonTilemap.Position, jsonTilemap.Map, jsonTilemap.Tiles, jsonTilemap.Size);
         }
     }
 }

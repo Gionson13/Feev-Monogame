@@ -18,6 +18,7 @@ namespace SandBox2D.DesktopGL
         AnimatedSprite animatedSprite;
         AnimatedSprite animatedSprite2;
         Sprite sprite;
+        Tilemap tilemap;
         Camera2D camera;
         Button button;
         Label label;
@@ -44,6 +45,9 @@ namespace SandBox2D.DesktopGL
             animatedSprite2 = Globals.content.LoadAnimatedSprite("file", new Vector2(Globals.graphics.PreferredBackBufferWidth / 2 + spriteSheet.Width / 6, 0));
             animatedSprite2.Origin = new Vector2(spriteSheet.Width / 6 / 2, 0);
             animatedSprite2.Play("not_idle");
+
+            tilemap = Globals.content.LoadTilemap("file");
+
             button = new Button(new Vector2(20, 20),
                 Globals.content.Load<Texture2D>("NormalButton"),
                 Globals.content.Load<Texture2D>("HoverButton"),
@@ -60,7 +64,6 @@ namespace SandBox2D.DesktopGL
             {
                 Log.Info("Hello");
             };
-
 
             Log.Info(animatedSprite);
         }
@@ -114,7 +117,8 @@ namespace SandBox2D.DesktopGL
             GraphicsDevice.Clear(clearColor);
 
             Batch.Begin(samplerState: SamplerState.PointClamp);
-            Batch.BeginMode2D(camera);
+            Batch.BeginMode2D(camera, true);
+            tilemap.Draw();
             sprite.Draw();
             animatedSprite2.Draw();
             animatedSprite.Draw();

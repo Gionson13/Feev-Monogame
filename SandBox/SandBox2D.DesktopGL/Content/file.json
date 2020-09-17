@@ -1,0 +1,95 @@
+{
+    "tiles": [
+        {
+            "id": 1,
+            "source_rectangle": {
+                "x": 384,
+                "y": 512,
+                "width": 128,
+                "height": 128
+            }
+        },
+        {
+            "id": 2,
+            "source_rectangle": {
+                "x": 512,
+                "y": 512,
+                "width": 128,
+                "height": 128
+            }
+        },
+        {
+            "id": 3,
+            "source_rectangle": {
+                "x": 384,
+                "y": 640,
+                "width": 128,
+                "height": 128
+            }
+        },
+        {
+            "id": 4,
+            "source_rectangle": {
+                "x": 512,
+                "y": 640,
+                "width": 128,
+                "height": 128
+            }
+        },
+        {
+            "id": 5,
+            "source_rectangle": {
+                "x": 128,
+                "y": 512,
+                "width": 128,
+                "height": 128
+            }
+        },
+        {
+            "id": 6,
+            "source_rectangle": {
+                "x": 256,
+                "y": 512,
+                "width": 128,
+                "height": 128
+            }
+        },
+        {
+            "id": 7,
+            "source_rectangle": {
+                "x": 0,
+                "y": 34,
+                "width": 128,
+                "height": 128
+            }
+        },
+        {
+            "id": 8,
+            "source_rectangle": {
+                "x": 17,
+                "y": 34,
+                "width": 128,
+                "height": 128
+            }
+        },
+        {
+            "id": 9,
+            "source_rectangle": {
+                "x": 34,
+                "y": 34,
+                "width": 128,
+                "height": 128
+            }
+        }
+    ],
+    "map": [
+        [ 1, 2, 0, 0, 1, 2 ],
+        [ 5, 6, 1, 2, 5, 6 ],
+        [ 3, 4, 3, 4, 5, 6 ],
+        [ 0, 0, 0, 0, 3, 4 ]
+    ],
+    "spritesheet": "sheet",
+    "position": [ -100, -100 ],
+    "tile_width": 128,
+    "tile_height": 128
+}
