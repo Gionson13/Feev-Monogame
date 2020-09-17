@@ -1,5 +1,4 @@
 ﻿using Microsoft.Xna.Framework;
-using System.Net.NetworkInformation;
 
 namespace Feev.DesktopGL.Utils
 {
@@ -27,6 +26,17 @@ namespace Feev.DesktopGL.Utils
             get
             {
                 return Matrix.CreateTranslation(new Vector3(-Position, 0)) *
+                    Matrix.CreateRotationZ(Rotation) *
+                    Matrix.CreateScale(Zoom) *
+                    Matrix.CreateTranslation(new Vector3(Origin, 0));
+            }
+        }
+
+        internal Matrix IntTranslationMatrix
+        {
+            get
+            {
+                return Matrix.CreateTranslation(new Vector3((int)-Position.X, (int)-Position.Y, 0)) *
                     Matrix.CreateRotationZ(Rotation) *
                     Matrix.CreateScale(Zoom) *
                     Matrix.CreateTranslation(new Vector3(Origin, 0));
