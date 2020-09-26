@@ -71,7 +71,7 @@ namespace SandBox2D.DesktopGL
 
         protected override void OnUpdate(GameTime gameTime)
         {
-            if (/*GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed ||*/ Keyboard.IsKeyDown(Keys.Escape))
+            if (GamePad.IsButtonDown(GamePadButtons.Back, Player.One) || Keyboard.IsKeyDown(Keys.Escape))
                 Exit();
 
             if (Mouse.IsButtonDown(MouseButtons.XButton1))

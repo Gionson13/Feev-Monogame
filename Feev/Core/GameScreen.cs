@@ -30,6 +30,7 @@ namespace Feev
         {
             Keyboard.Update();
             Mouse.Update();
+            GamePad.Update();
             OnUpdate(gameTime);
             base.Update(gameTime);
         }
