@@ -1,6 +1,4 @@
-﻿using Microsoft.Xna.Framework.Input;
-
-using MonoKeys = Microsoft.Xna.Framework.Input.Keys;
+﻿using MonoKeys = Microsoft.Xna.Framework.Input.Keys;
 
 namespace Feev.Input
 {
