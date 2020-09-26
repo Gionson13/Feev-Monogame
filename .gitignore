@@ -1,4 +1,6 @@
 .vs/
+Feev/bin/
+Feev/obj/
 Feev.DesktopGL/bin/
 Feev.DesktopGL/obj/
 SandBox/SandBox2D.DesktopGL/bin/
