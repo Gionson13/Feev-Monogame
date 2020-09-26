@@ -1,10 +1,10 @@
-﻿using Feev.DesktopGL;
-using Feev.DesktopGL.Debug;
-using Feev.DesktopGL.Extension;
-using Feev.DesktopGL.Graphics;
-using Feev.DesktopGL.Graphics.UI;
-using Feev.DesktopGL.Input;
-using Feev.DesktopGL.Utils;
+﻿using Feev;
+using Feev.Debug;
+using Feev.Extension;
+using Feev.Graphics;
+using Feev.Graphics.UI;
+using Feev.Input;
+using Feev.Utils;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -32,18 +32,19 @@ namespace SandBox2D.DesktopGL
         protected override void OnInitialize()
         {
             camera = new Camera2D(0f, 1f);
+            Window.AllowUserResizing = true;    
         }
 
         protected override void OnLoad()
         {
             font = Globals.content.Load<SpriteFont>("Font");
-            var spriteSheet = Globals.content.Load<Texture2D>("scarfy");
-            sprite = new Sprite(spriteSheet, new Transform2D(new Vector2(Globals.graphics.PreferredBackBufferWidth / 2, 200), 0f, Vector2.One), new Vector2(spriteSheet.Width / 2, 0));
+            var texture = Globals.content.Load<Texture2D>("scarfy");
+            sprite = new Sprite(texture, new Transform2D(new Vector2(Globals.graphics.PreferredBackBufferWidth / 2, 200), 0f, Vector2.One), new Vector2(texture.Width / 2, 0));
 
-            animatedSprite = Globals.content.LoadAnimatedSprite("file", new Vector2(Globals.graphics.PreferredBackBufferWidth / 2 - spriteSheet.Width / 6, 0));
-            animatedSprite.Origin = new Vector2(spriteSheet.Width / 6 / 2, spriteSheet.Height / 2);
-            animatedSprite2 = Globals.content.LoadAnimatedSprite("file", new Vector2(Globals.graphics.PreferredBackBufferWidth / 2 + spriteSheet.Width / 6, 0));
-            animatedSprite2.Origin = new Vector2(spriteSheet.Width / 6 / 2, 0);
+            animatedSprite = Globals.content.LoadAnimatedSprite("file", new Vector2(Globals.graphics.PreferredBackBufferWidth / 2 - texture.Width / 6, 0));
+            animatedSprite.Origin = new Vector2(texture.Width / 6 / 2, texture.Height / 2);
+            animatedSprite2 = Globals.content.LoadAnimatedSprite("file", new Vector2(Globals.graphics.PreferredBackBufferWidth / 2 + texture.Width / 6, 0));
+            animatedSprite2.Origin = new Vector2(texture.Width / 6 / 2, 0);
             animatedSprite2.Play("not_idle");
 
             tilemap = Globals.content.LoadTilemap("file");
@@ -125,8 +126,6 @@ namespace SandBox2D.DesktopGL
             Batch.EndMode2D();
             button.Draw();
             label.Draw();
-            //Batch.DrawString(font, FeevMouse.TotalScrollWheelValue.ToString(), Vector2.Zero, Color.White);
-            //Batch.DrawString(font, camera.Zoom.ToString(), new Vector2(0, 50), Color.White);
             Batch.End();
         }
     }
