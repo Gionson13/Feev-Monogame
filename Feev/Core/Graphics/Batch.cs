@@ -15,39 +15,129 @@ namespace Feev.Graphics
         private static DepthStencilState _depthStencilState;
         private static RasterizerState _rasterizerState;
         private static Effect _effect;
+        private static Matrix? _translationMatrix;
+
+        public static SpriteSortMode SortMode
+        {
+            get { return _sortMode; }
+            set
+            {
+                _sortMode = value;
+                if (_hasBegun)
+                {
+                    Globals.spriteBatch.End();
+                    Globals.spriteBatch.Begin(_sortMode, BlendState, _samplerState, _depthStencilState, _rasterizerState, _effect, _translationMatrix);
+                }
+            }
+        }
+        public static BlendState BlendState
+        {
+            get { return _blendState; }
+            set
+            {
+                _blendState = value;
+                if (_hasBegun)
+                {
+                    Globals.spriteBatch.End();
+                    Globals.spriteBatch.Begin(_sortMode, BlendState, _samplerState, _depthStencilState, _rasterizerState, _effect, _translationMatrix);
+                }
+            }
+        }
+        public static SamplerState SamplerState
+        {
+            get { return _samplerState; }
+            set
+            {
+                _samplerState = value;
+                if (_hasBegun)
+                {
+                    Globals.spriteBatch.End();
+                    Globals.spriteBatch.Begin(_sortMode, BlendState, _samplerState, _depthStencilState, _rasterizerState, _effect, _translationMatrix);
+                }
+            }
+        }
+        public static DepthStencilState DepthStencilState
+        {
+            get { return _depthStencilState; }
+            set
+            {
+                _depthStencilState = value;
+                if (_hasBegun)
+                {
+                    Globals.spriteBatch.End();
+                    Globals.spriteBatch.Begin(_sortMode, BlendState, _samplerState, _depthStencilState, _rasterizerState, _effect, _translationMatrix);
+                }
+            }
+        }
+        public static RasterizerState RasterizerState
+        {
+            get { return _rasterizerState; }
+            set
+            {
+                _rasterizerState = value;
+                if (_hasBegun)
+                {
+                    Globals.spriteBatch.End();
+                    Globals.spriteBatch.Begin(_sortMode, BlendState, _samplerState, _depthStencilState, _rasterizerState, _effect, _translationMatrix);
+                }
+            }
+        }
+        public static Effect Effect
+        {
+            get { return _effect; }
+            set
+            {
+                _effect = value;
+                if (_hasBegun)
+                {
+                    Globals.spriteBatch.End();
+                    Globals.spriteBatch.Begin(_sortMode, BlendState, _samplerState, _depthStencilState, _rasterizerState, _effect, _translationMatrix);
+                }
+            }
+        }
+        public static Matrix? TranslationMatrix
+        {
+            get { return _translationMatrix; }
+            set
+            {
+                _translationMatrix = value;
+                if (_hasBegun)
+                {
+                    Globals.spriteBatch.End();
+                    Globals.spriteBatch.Begin(_sortMode, BlendState, _samplerState, _depthStencilState, _rasterizerState, _effect, _translationMatrix);
+                }
+            }
+        }
 
         #endregion
+
+        private static bool _hasBegun = false;
 
         /// <summary>
         /// Begins a new sprite and text batch with the specified render state.
         /// </summary>
-        /// <param name="sortMode">The drawing order for sprite and text drawing. 
-        /// Microsoft.Xna.Framework.Graphics.SpriteSortMode.Deferred by default.</param>
-        /// <param name="blendState">State of the blending. Uses Microsoft.Xna.Framework.Graphics.BlendState.AlphaBlend
-        /// if null.</param>
-        /// <param name="samplerState">State of the sampler. Uses Microsoft.Xna.Framework.Graphics.SamplerState.LinearClamp
-        /// if null.</param>
-        /// <param name="depthStencilState">State of the depth-stencil buffer. Uses Microsoft.Xna.Framework.Graphics.DepthStencilState.None
-        /// if null.</param>
-        /// <param name="rasterizerState">State of the rasterization. Uses Microsoft.Xna.Framework.Graphics.RasterizerState.CullCounterClockwise
-        /// if null.</param>
-        /// <param name="effect">A custom Microsoft.Xna.Framework.Graphics.Effect to override the default sprite
-        /// effect. Uses default sprite effect if null.</param>
-        /// <param name="transformMatrix">An optional matrix used to transform the sprite geometry. Uses Microsoft.Xna.Framework.Matrix.Identity
-        /// if null.</param>
         /// <exception cref="System.InvalidOperationException">Thrown if Microsoft.Xna.Framework.Graphics.SpriteBatch.Begin(Microsoft.Xna.Framework.Graphics.SpriteSortMode,Microsoft.Xna.Framework.Graphics.BlendState,Microsoft.Xna.Framework.Graphics.SamplerState,Microsoft.Xna.Framework.Graphics.DepthStencilState,Microsoft.Xna.Framework.Graphics.RasterizerState,Microsoft.Xna.Framework.Graphics.Effect,System.Nullable{Microsoft.Xna.Framework.Matrix})
         /// is called next time without previous Microsoft.Xna.Framework.Graphics.SpriteBatch.End.</exception>
         /// <remarks>This method uses optional parameters.</remarks>
-        public static void Begin(SpriteSortMode sortMode = SpriteSortMode.Deferred, BlendState blendState = null, SamplerState samplerState = null, DepthStencilState depthStencilState = null, RasterizerState rasterizerState = null, Effect effect = null, Matrix? transformMatrix = null)
+        public static void Begin()
         {
-            _sortMode = sortMode;
-            _blendState = blendState;
-            _samplerState = samplerState;
-            _depthStencilState = depthStencilState;
-            _rasterizerState = rasterizerState;
-            _effect = effect;
+            _hasBegun = true;
+            Globals.spriteBatch.Begin(_sortMode, _blendState, _samplerState, _depthStencilState, _rasterizerState, _effect, _translationMatrix);
+        }
 
-            Globals.spriteBatch.Begin(sortMode, blendState, samplerState, depthStencilState, rasterizerState, effect, transformMatrix);
+
+        /// <summary>
+        /// Begins a new sprite and text batch with the specified render state.
+        /// </summary>
+        /// <param name="renderTarget">The render target.</param>
+        /// <exception cref="System.InvalidOperationException">Thrown if Microsoft.Xna.Framework.Graphics.SpriteBatch.Begin(Microsoft.Xna.Framework.Graphics.SpriteSortMode,Microsoft.Xna.Framework.Graphics.BlendState,Microsoft.Xna.Framework.Graphics.SamplerState,Microsoft.Xna.Framework.Graphics.DepthStencilState,Microsoft.Xna.Framework.Graphics.RasterizerState,Microsoft.Xna.Framework.Graphics.Effect,System.Nullable{Microsoft.Xna.Framework.Matrix})
+        /// is called next time without previous Microsoft.Xna.Framework.Graphics.SpriteBatch.End.</exception>
+        /// <remarks>This method uses optional parameters.</remarks>
+        public static void Begin(RenderTarget2D renderTarget)
+        {
+            _hasBegun = true;
+            Globals.spriteBatch.GraphicsDevice.SetRenderTarget(renderTarget);
+            Globals.spriteBatch.Begin(_sortMode, _blendState, _samplerState, _depthStencilState, _rasterizerState, _effect, _translationMatrix);
         }
 
         /// <summary>
@@ -67,10 +157,13 @@ namespace Feev.Graphics
         public static void BeginMode2D(Camera2D camera, bool pixelPerfect)
         {
             Globals.spriteBatch.End();
+
             if (pixelPerfect)
-                Globals.spriteBatch.Begin(_sortMode, _blendState, _samplerState, _depthStencilState, _rasterizerState, _effect, camera.IntTranslationMatrix);
+                _translationMatrix = camera.IntTranslationMatrix;
             else
-                Globals.spriteBatch.Begin(_sortMode, _blendState, _samplerState, _depthStencilState, _rasterizerState, _effect, camera.TranslationMatrix);
+                _translationMatrix = camera.TranslationMatrix;
+
+            Globals.spriteBatch.Begin(_sortMode, _blendState, _samplerState, _depthStencilState, _rasterizerState, _effect, _translationMatrix);
         }
 
         /// <summary>
@@ -268,6 +361,24 @@ namespace Feev.Graphics
         }
 
         /// <summary>
+        /// Apply an <see cref="Effect"/> to the batch.
+        /// </summary>
+        /// <param name="effect">The effect to apply.</param>
+        public static void ApplyEffect(Effect effect)
+        {
+            if (effect != _effect)
+            {
+                _effect = effect;
+
+                if (_hasBegun)
+                {
+                    Globals.spriteBatch.End();
+                    Globals.spriteBatch.Begin(_sortMode, _blendState, _samplerState, _depthStencilState, _rasterizerState, _effect, _translationMatrix);
+                }
+            }
+        }
+
+        /// <summary>
         /// Flushes all batched text and sprites to the screen.
         /// </summary>
         /// <remarks>This command should be called after Microsoft.Xna.Framework.Graphics.SpriteBatch.Begin(Microsoft.Xna.Framework.Graphics.SpriteSortMode,Microsoft.Xna.Framework.Graphics.BlendState,Microsoft.Xna.Framework.Graphics.SamplerState,Microsoft.Xna.Framework.Graphics.DepthStencilState,Microsoft.Xna.Framework.Graphics.RasterizerState,Microsoft.Xna.Framework.Graphics.Effect,System.Nullable{Microsoft.Xna.Framework.Matrix})
@@ -275,6 +386,11 @@ namespace Feev.Graphics
         public static void End()
         {
             Globals.spriteBatch.End();
+            _hasBegun = false;
+            _effect = null;
+
+            Globals.spriteBatch.GraphicsDevice.SetRenderTarget(null);
+
         }
 
         /// <summary>
@@ -282,6 +398,7 @@ namespace Feev.Graphics
         /// </summary>
         public static void EndMode2D()
         {
+            _translationMatrix = null;
             Globals.spriteBatch.End();
             Globals.spriteBatch.Begin(_sortMode, _blendState, _samplerState, _depthStencilState, _rasterizerState, _effect);
         }
