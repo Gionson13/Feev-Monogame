@@ -8,14 +8,16 @@ namespace Feev
     {
         public GameScreen()
         {
-            Globals.graphics = new GraphicsDeviceManager(this);
+            Globals.Graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-            Globals.content = Content;
+            Globals.Content = Content;
         }
 
         protected sealed override void Initialize()
         {
+            Globals.GraphicsDevice = GraphicsDevice;
             OnInitialize();
+
             base.Initialize();
         }
 

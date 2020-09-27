@@ -3,12 +3,36 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <OutputType>Library</OutputType>
     <LangVersion>8.0</LangVersion>
+    <Authors>Gionson13</Authors>
+    <RepositoryUrl>https://github.com/Gionson13/Feev-Monogame</RepositoryUrl>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DefineConstants>TRACE;OPENGL</DefineConstants>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Remove="Resources\OpenGL\pointLightShader.mgfxo" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\OpenGL\pointLightShader.mgfxo">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.8.0.1641">
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Resources\DirectX_11\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\OpenGL\pointLightShader.mgfxo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="Resources\pointLightShader.fx">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 </Project>

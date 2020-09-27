@@ -14,6 +14,8 @@ namespace SandBox2D.DesktopGL
     public class Game1 : GameScreen
     {
         SpriteFont font;
+        Texture2D scarfy;
+        Texture2D sheet;
         Color clearColor = Color.Black;
         AnimatedSprite animatedSprite;
         AnimatedSprite animatedSprite2;
@@ -24,6 +26,8 @@ namespace SandBox2D.DesktopGL
         Label label;
         float speed = 400;
 
+        PointLight pointLight;
+
         public Game1()
         {
             IsMouseVisible = true;
@@ -32,27 +36,29 @@ namespace SandBox2D.DesktopGL
         protected override void OnInitialize()
         {
             camera = new Camera2D(0f, 1f);
-            Window.AllowUserResizing = true;    
+            Window.AllowUserResizing = true;
+            Batch.SamplerState = SamplerState.PointClamp;
         }
 
         protected override void OnLoad()
         {
-            font = Globals.content.Load<SpriteFont>("Font");
-            var texture = Globals.content.Load<Texture2D>("scarfy");
-            sprite = new Sprite(texture, new Transform2D(new Vector2(Globals.graphics.PreferredBackBufferWidth / 2, 200), 0f, Vector2.One), new Vector2(texture.Width / 2, 0));
+            font = Globals.Content.Load<SpriteFont>("Font");
+            scarfy = Globals.Content.Load<Texture2D>("scarfy");
+            sheet = Globals.Content.Load<Texture2D>("sheet");
+            sprite = new Sprite(scarfy, new Transform2D(new Vector2(Globals.Graphics.PreferredBackBufferWidth / 2, 200), 0f, Vector2.One), new Vector2(scarfy.Width / 2, 0));
 
-            animatedSprite = Globals.content.LoadAnimatedSprite("file", new Vector2(Globals.graphics.PreferredBackBufferWidth / 2 - texture.Width / 6, 0));
-            animatedSprite.Origin = new Vector2(texture.Width / 6 / 2, texture.Height / 2);
-            animatedSprite2 = Globals.content.LoadAnimatedSprite("file", new Vector2(Globals.graphics.PreferredBackBufferWidth / 2 + texture.Width / 6, 0));
-            animatedSprite2.Origin = new Vector2(texture.Width / 6 / 2, 0);
+            animatedSprite = Globals.Content.LoadAnimatedSprite("file", new Vector2(Globals.Graphics.PreferredBackBufferWidth / 2 - scarfy.Width / 6, 0));
+            animatedSprite.Origin = new Vector2(scarfy.Width / 6 / 2, scarfy.Height / 2);
+            animatedSprite2 = Globals.Content.LoadAnimatedSprite("file", new Vector2(Globals.Graphics.PreferredBackBufferWidth / 2 + scarfy.Width / 6, 0));
+            animatedSprite2.Origin = new Vector2(scarfy.Width / 6 / 2, 0);
             animatedSprite2.Play("not_idle");
 
-            tilemap = Globals.content.LoadTilemap("file");
+            tilemap = Globals.Content.LoadTilemap("file");
 
             button = new Button(new Vector2(20, 20),
-                Globals.content.Load<Texture2D>("NormalButton"),
-                Globals.content.Load<Texture2D>("HoverButton"),
-                Globals.content.Load<Texture2D>("PressedButton"));
+                Globals.Content.Load<Texture2D>("NormalButton"),
+                Globals.Content.Load<Texture2D>("HoverButton"),
+                Globals.Content.Load<Texture2D>("PressedButton"));
 
             label = new Label("Hello", font, Color.Red, new Transform2D(new Vector2(20, 60), 0f, Vector2.One));
 
@@ -66,6 +72,8 @@ namespace SandBox2D.DesktopGL
                 Log.Info("Hello");
             };
 
+            pointLight = new PointLight(Vector2.Zero, 120f, Color.White);
+
             Log.Info(animatedSprite);
         }
 
@@ -74,13 +82,10 @@ namespace SandBox2D.DesktopGL
             if (GamePad.IsButtonDown(GamePadButtons.Back, Player.One) || Keyboard.IsKeyDown(Keys.Escape))
                 Exit();
 
+            Random random = new Random();
             if (Mouse.IsButtonDown(MouseButtons.XButton1))
             {
-                Random random = new Random();
-                float r = random.NextFloat();
-                float g = random.NextFloat();
-                float b = random.NextFloat();
-                clearColor = new Color(r, g, b);
+                clearColor = random.NextColor(Color.Black, Color.White);
             }
 
             if (Keyboard.IsKeyDown(Keys.A))
@@ -109,6 +114,18 @@ namespace SandBox2D.DesktopGL
             if (Keyboard.GetPressedKeys().Length > 0)
                 Log.Print(Keyboard.GetPressedKeys()[0]);
 
+            if (Keyboard.IsKeyDown(Keys.Plus))
+                pointLight.Radius += 100f * gameTime.GetElapsedSeconds();
+            if (pointLight.Radius > 0 && Keyboard.IsKeyDown(Keys.Minus))
+                pointLight.Radius -= 100f * gameTime.GetElapsedSeconds();
+
+            pointLight.Position = camera.ScreenToWorld(Mouse.Position);
+
+            if (Mouse.IsButtonJustPressed(MouseButtons.Left))
+            {
+                var pointLight2 = new PointLight(camera.ScreenToWorld(Mouse.Position), 100f, random.NextColor());
+            }
+
             //if (Microsoft.Xna.Framework.Input.Keyboard.GetState().GetPressedKeys().Length > 0)
             //    Log.Print(Microsoft.Xna.Framework.Input.Keyboard.GetState().GetPressedKeys()[0]);
         }
@@ -117,16 +134,25 @@ namespace SandBox2D.DesktopGL
         {
             GraphicsDevice.Clear(clearColor);
 
-            Batch.Begin(samplerState: SamplerState.PointClamp);
+            RenderTarget2D renderTarget = new RenderTarget2D(GraphicsDevice, 800, 480);
+
+            Batch.Begin(renderTarget);
             Batch.BeginMode2D(camera, true);
             tilemap.Draw();
             sprite.Draw();
             animatedSprite2.Draw();
             animatedSprite.Draw();
             Batch.EndMode2D();
+            Batch.End();
+
+            PointLight.Draw(renderTarget, camera);
+
+            Batch.Begin();
             button.Draw();
             label.Draw();
             Batch.End();
+
+            renderTarget.Dispose();
         }
     }
 }
