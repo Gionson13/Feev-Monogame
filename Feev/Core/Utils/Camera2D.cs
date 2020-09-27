@@ -13,8 +13,8 @@ namespace Feev.Utils
             get
             {
                 Vector2 viewPortCorner = ScreenToWorld(new Vector2(0, 0));
-                Vector2 viewPortBottomCorner = ScreenToWorld(new Vector2(Globals.graphics.GraphicsDevice.Viewport.Width,
-                    Globals.graphics.GraphicsDevice.Viewport.Height));
+                Vector2 viewPortBottomCorner = ScreenToWorld(new Vector2(Globals.Graphics.GraphicsDevice.Viewport.Width,
+                    Globals.Graphics.GraphicsDevice.Viewport.Height));
 
                 return new Rectangle(viewPortCorner.ToPoint(), (viewPortBottomCorner - viewPortCorner).ToPoint());
             }
@@ -45,10 +45,10 @@ namespace Feev.Utils
 
         public Camera2D(float rotation, float zoom)
         {
-            Position = new Vector2(Globals.graphics.PreferredBackBufferWidth, Globals.graphics.PreferredBackBufferHeight) / 2; ;
+            Position = new Vector2(Globals.Graphics.PreferredBackBufferWidth, Globals.Graphics.PreferredBackBufferHeight) / 2; ;
             Rotation = rotation;
             Zoom = zoom;
-            Origin = new Vector2(Globals.graphics.PreferredBackBufferWidth, Globals.graphics.PreferredBackBufferHeight) / 2;
+            Origin = new Vector2(Globals.Graphics.PreferredBackBufferWidth, Globals.Graphics.PreferredBackBufferHeight) / 2;
         }
 
         public Camera2D(Vector2 position, float rotation, float zoom)
@@ -56,7 +56,7 @@ namespace Feev.Utils
             Position = position;
             Rotation = rotation;
             Zoom = zoom;
-            Origin = new Vector2(Globals.graphics.PreferredBackBufferWidth, Globals.graphics.PreferredBackBufferHeight) / 2;
+            Origin = new Vector2(Globals.Graphics.PreferredBackBufferWidth, Globals.Graphics.PreferredBackBufferHeight) / 2;
         }
 
 
