@@ -1,4 +1,8 @@
-﻿using Feev.Input;
+﻿using Feev.Extension;
+using Feev.Graphics;
+using Feev.Input;
+using Feev.Utils;
+using Leopotam.Ecs;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -11,6 +15,7 @@ namespace Feev
             Globals.Graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             Globals.Content = Content;
+            Globals.ecsWorld = new EcsWorld();
         }
 
         protected sealed override void Initialize()
@@ -33,19 +38,44 @@ namespace Feev
             Keyboard.Update();
             Mouse.Update();
             GamePad.Update();
-            OnUpdate(gameTime);
+
+            Time.DeltaTime = gameTime.GetElapsedSeconds();
+            Time.TotalTime += Time.DeltaTime;
+
+            foreach (Entity entity in Globals.entities)
+                entity.Update();
+
+            if (Globals.shouldExit) Exit();
+
             base.Update(gameTime);
         }
 
         protected sealed override void Draw(GameTime gameTime)
         {
-            OnDraw();
+            GraphicsDevice.Clear(Globals.ClearColor);
+
+
+            Batch.Begin();
+
+            if (Globals.mainCamera != null)
+                Batch.BeginMode2D(Globals.mainCamera);
+
+            foreach (Entity entity in Globals.entities)
+                entity.Draw();
+
+            if (Globals.mainCamera != null)
+                Batch.EndMode2D();
+
+            foreach (Entity entity in Globals.entities)
+                entity.DrawUI();
+
+            Batch.End();
+
+
             base.Draw(gameTime);
         }
 
         protected virtual void OnInitialize() { }
         protected virtual void OnLoad() { }
-        protected virtual void OnUpdate(GameTime gameTime) { }
-        protected virtual void OnDraw() { }
     }
 }

@@ -73,7 +73,26 @@ namespace Feev.Graphics
             {
                 positions[i] = camera.WorldToScreen(Globals.pointLights[i].Position);
                 colors[i] = Globals.pointLights[i].Color.ToVector4();
-                radiuses[i] = Globals.pointLights[i].Radius * camera.Zoom;
+                radiuses[i] = Globals.pointLights[i].Radius * camera.Scale.X;
+            }
+
+            Draw(renderTarget, colors, positions, radiuses);
+        }
+
+        /// <summary>
+        /// Draws the light on top of a renderTarget. (Draws the result on screen).
+        /// </summary>
+        /// <param name="renderTarget">The render target to draw on.</param>
+        /// <param name="camera">A camera.</param>
+        public static void Draw(RenderTarget2D renderTarget, CameraComponent camera)
+        {
+            InitializeDraw(out Vector2[] positions, out Vector4[] colors, out float[] radiuses);
+
+            for (int i = 0; i < positions.Length; i++)
+            {
+                positions[i] = camera.WorldToScreen(Globals.pointLights[i].Position);
+                colors[i] = Globals.pointLights[i].Color.ToVector4();
+                radiuses[i] = Globals.pointLights[i].Radius * camera.camera.Scale.X;
             }
 
             Draw(renderTarget, colors, positions, radiuses);

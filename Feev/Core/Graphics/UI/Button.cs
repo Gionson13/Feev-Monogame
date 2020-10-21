@@ -11,7 +11,11 @@ namespace Feev.Graphics.UI
         public Texture2D Normal;
         public Texture2D Hover;
         public Texture2D Pressed;
-        public Transform2D Transform;
+        
+        public Vector2 Position;
+        public float Rotation;
+        public Vector2 Scale;
+
         public bool IsPressed = false;
 
         public event EventHandler OnClick;
@@ -19,18 +23,8 @@ namespace Feev.Graphics.UI
 
         private Texture2D _currentTexture;
 
-        public Button(Vector2 position, Texture2D normal, Texture2D hover, Texture2D pressed)
+        public Button(Texture2D normal, Texture2D hover, Texture2D pressed)
         {
-            Transform = new Transform2D(position, 0f, Vector2.One);
-            Normal = normal;
-            Hover = hover;
-            Pressed = pressed;
-            _currentTexture = Normal;
-        }
-        
-        public Button(Transform2D transform, Texture2D normal, Texture2D hover, Texture2D pressed)
-        {
-            Transform = transform;
             Normal = normal;
             Hover = hover;
             Pressed = pressed;
@@ -41,8 +35,8 @@ namespace Feev.Graphics.UI
         {
             Vector2 mousePosition = Mouse.Position;
 
-            if (mousePosition.X > Transform.Position.X && mousePosition.X < Transform.Position.X + _currentTexture.Width &&
-                mousePosition.Y > Transform.Position.Y && mousePosition.Y < Transform.Position.Y + _currentTexture.Height)
+            if (mousePosition.X > Position.X && mousePosition.X < Position.X + _currentTexture.Width * Scale.X &&
+                mousePosition.Y > Position.Y && mousePosition.Y < Position.Y + _currentTexture.Height * Scale.Y)
             {
                 _currentTexture = Hover;
 
@@ -75,7 +69,7 @@ namespace Feev.Graphics.UI
 
         public void Draw(Color color)
         {
-            Batch.Draw(_currentTexture, Transform.Position, null, color, Transform.Rotation, Vector2.Zero, Transform.Scale, SpriteEffects.None, 0f);
+            Batch.Draw(_currentTexture, Position, null, color, Rotation, Vector2.Zero, Scale, SpriteEffects.None, 0f);
         }
 
         #endregion

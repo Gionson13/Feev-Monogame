@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <OutputType>Library</OutputType>
@@ -8,6 +8,10 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DefineConstants>TRACE;OPENGL</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
     <None Remove="Resources\OpenGL\pointLightShader.mgfxo" />
@@ -26,6 +30,9 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\DirectX_11\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\External\LeopotamEcs\Leopotam.Ecs.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\OpenGL\pointLightShader.mgfxo" />

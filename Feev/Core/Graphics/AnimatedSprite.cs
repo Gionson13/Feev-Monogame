@@ -1,5 +1,4 @@
-﻿using Feev.Extension;
-using Feev.Utils;
+﻿using Feev.Utils;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
@@ -8,19 +7,27 @@ namespace Feev.Graphics
 {
     public class AnimatedSprite
     {
-        private float _elapsedTime = 0f;
-        private int frameIndex = 0;
-        private bool paused = false;
+        private float _elapsedTime;
+        private int frameIndex;
+        private bool paused;
 
         internal SpriteAnimation _currentAnimation;
         internal Dictionary<string, SpriteAnimation> _animations;
 
-        public Transform2D Transform = new Transform2D(Vector2.Zero, 0f, Vector2.One);
-        public Vector2 Origin = Vector2.Zero;
+        public Transform2D Transform;
+        public Vector2 Origin;
 
         public AnimatedSprite()
         {
+            _elapsedTime = 0f;
+            frameIndex = 0;
+            paused = false;
+
+            Transform = new Transform2D(Vector2.Zero, 0f, Vector2.One);
+            Origin = Vector2.Zero;
+
             _animations = new Dictionary<string, SpriteAnimation>();
+            _currentAnimation = new SpriteAnimation();
         }
 
         #region Update
@@ -28,21 +35,11 @@ namespace Feev.Graphics
         /// <summary>
         /// Updated the animation.
         /// </summary>
-        /// <param name="gameTime">The elapsed time since the last call.</param>
-        public void Update(GameTime gameTime)
-        {
-            Update(gameTime.GetElapsedSeconds());
-        }
-
-        /// <summary>
-        /// Updated the animation.
-        /// </summary>
-        /// <param name="gameTime">The elapsed time since the last call.</param>
-        public void Update(float gameTime)
+        public void Update()
         {
             if (!paused)
             {
-                _elapsedTime += gameTime;
+                _elapsedTime += Time.DeltaTime;
 
                 if (_elapsedTime >= _currentAnimation.FrameDuration)
                 {

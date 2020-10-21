@@ -6,8 +6,11 @@ namespace Feev.Utils
     {
         public Vector2 Position;
         public float Rotation;
-        public float Zoom;
+        public Vector2 Scale;
         public Vector2 Origin;
+        public bool PixelPerfect = false;
+
+
         public Rectangle Bounds
         {
             get
@@ -25,46 +28,41 @@ namespace Feev.Utils
         {
             get
             {
-                return Matrix.CreateTranslation(new Vector3(-Position, 0)) *
-                    Matrix.CreateRotationZ(Rotation) *
-                    Matrix.CreateScale(Zoom) *
-                    Matrix.CreateTranslation(new Vector3(Origin, 0));
+                if (PixelPerfect)
+                    return Matrix.CreateTranslation(new Vector3((int)-Position.X, (int)-Position.Y, 0)) *
+                        Matrix.CreateRotationZ(Rotation) *
+                        Matrix.CreateScale(new Vector3(Scale, 1)) *
+                        Matrix.CreateTranslation(new Vector3(Origin, 0));
+                else
+                    return Matrix.CreateTranslation(new Vector3(-Position, 0)) *
+                        Matrix.CreateRotationZ(Rotation) *
+                        Matrix.CreateScale(new Vector3(Scale, 1)) *
+                        Matrix.CreateTranslation(new Vector3(Origin, 0));
             }
         }
 
-        internal Matrix IntTranslationMatrix
+        public Camera2D(float rotation, float scale)
         {
-            get
-            {
-                return Matrix.CreateTranslation(new Vector3((int)-Position.X, (int)-Position.Y, 0)) *
-                    Matrix.CreateRotationZ(Rotation) *
-                    Matrix.CreateScale(Zoom) *
-                    Matrix.CreateTranslation(new Vector3(Origin, 0));
-            }
-        }
-
-        public Camera2D(float rotation, float zoom)
-        {
-            Position = new Vector2(Globals.Graphics.PreferredBackBufferWidth, Globals.Graphics.PreferredBackBufferHeight) / 2; ;
+            Position = new Vector2(Globals.Graphics.PreferredBackBufferWidth, Globals.Graphics.PreferredBackBufferHeight) / 2;
             Rotation = rotation;
-            Zoom = zoom;
+            Scale = new Vector2(scale, 1);
             Origin = new Vector2(Globals.Graphics.PreferredBackBufferWidth, Globals.Graphics.PreferredBackBufferHeight) / 2;
         }
 
-        public Camera2D(Vector2 position, float rotation, float zoom)
+        public Camera2D(Vector2 position, float rotation, float scale)
         {
             Position = position;
             Rotation = rotation;
-            Zoom = zoom;
+            Scale = new Vector2(scale, 1);
             Origin = new Vector2(Globals.Graphics.PreferredBackBufferWidth, Globals.Graphics.PreferredBackBufferHeight) / 2;
         }
 
 
-        public Camera2D(Vector2 position, float rotation, float zoom, Vector2 origin)
+        public Camera2D(Vector2 position, float rotation, float scale, Vector2 origin)
         {
             Position = position;
             Rotation = rotation;
-            Zoom = zoom;
+            Scale = new Vector2(scale, 1);
             Origin = origin;
         }
 

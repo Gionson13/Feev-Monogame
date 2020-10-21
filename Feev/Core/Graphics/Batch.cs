@@ -146,22 +146,9 @@ namespace Feev.Graphics
         /// <param name="camera">The camera.</param>
         public static void BeginMode2D(Camera2D camera)
         {
-            BeginMode2D(camera, false);
-        }
-
-        /// <summary>
-        /// Begin drawing relative to a camera.
-        /// </summary>
-        /// <param name="camera">The camera.</param>
-        /// <param name="pixelPerfect">If <c>true</c> uses a temporary position converted to integers.</param>
-        public static void BeginMode2D(Camera2D camera, bool pixelPerfect)
-        {
             Globals.spriteBatch.End();
 
-            if (pixelPerfect)
-                _translationMatrix = camera.IntTranslationMatrix;
-            else
-                _translationMatrix = camera.TranslationMatrix;
+            _translationMatrix = camera.TranslationMatrix;
 
             Globals.spriteBatch.Begin(_sortMode, _blendState, _samplerState, _depthStencilState, _rasterizerState, _effect, _translationMatrix);
         }

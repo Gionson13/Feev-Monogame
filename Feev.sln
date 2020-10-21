@@ -5,7 +5,11 @@ VisualStudioVersion = 16.0.30413.136
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SandBox2D.DesktopGL", "SandBox\SandBox2D.DesktopGL\SandBox2D.DesktopGL.csproj", "{69235EBA-018D-4E3F-9886-AE7D01F6CC60}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Feev", "Feev\Feev.csproj", "{FFB6C109-EBF3-4FE3-B90A-220EFD864D0B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Feev", "Feev\Feev.csproj", "{FFB6C109-EBF3-4FE3-B90A-220EFD864D0B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Leopotam.Ecs", "External\LeopotamEcs\Leopotam.Ecs.csproj", "{1A1DBB85-D5A9-4702-A4FD-99858CE3F87E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "External", "External", "{24391B54-022F-4B4F-8E64-505A41468C76}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,9 +25,16 @@ Global
 		{FFB6C109-EBF3-4FE3-B90A-220EFD864D0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FFB6C109-EBF3-4FE3-B90A-220EFD864D0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FFB6C109-EBF3-4FE3-B90A-220EFD864D0B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1A1DBB85-D5A9-4702-A4FD-99858CE3F87E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1A1DBB85-D5A9-4702-A4FD-99858CE3F87E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1A1DBB85-D5A9-4702-A4FD-99858CE3F87E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1A1DBB85-D5A9-4702-A4FD-99858CE3F87E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{1A1DBB85-D5A9-4702-A4FD-99858CE3F87E} = {24391B54-022F-4B4F-8E64-505A41468C76}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C695AECA-857C-4812-86CD-6CC582D61E4E}
