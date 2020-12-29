@@ -1,4 +1,6 @@
 ﻿using Feev.Debug;
+using Feev.Graphics;
+using Feev.Graphics.UI;
 using Leopotam.Ecs;
 using Microsoft.Xna.Framework;
 using System;
@@ -8,8 +10,6 @@ namespace Feev.Utils
     public class Entity
     {
         private EcsEntity _entity;
-
-        public event TransformEventHandler OnTransformChanged;
 
         public Entity()
         {
@@ -29,7 +29,6 @@ namespace Feev.Utils
             ref TransformComponent transformComponent = ref _entity.Get<TransformComponent>();
 
             tagComponent.Tag = tag;
-            transformComponent.owner = this;
             transformComponent.Position = Vector2.Zero;
             transformComponent.Rotation = 0f;
             transformComponent.Scale = Vector2.One;
@@ -42,56 +41,35 @@ namespace Feev.Utils
             if (_entity.Has<ScriptComponent>())
             {
                 ref ScriptComponent script = ref _entity.Get<ScriptComponent>();
-                script.Update();
+                script.script.OnUpdate();
             }
 
             if (_entity.Has<AnimatedSpriteComponent>())
-            {
-                ref AnimatedSpriteComponent animatedSprite = ref _entity.Get<AnimatedSpriteComponent>();
-                animatedSprite.Update();
-            }
+                AnimatedSprite.Update(this);
 
             if (_entity.Has<ButtonComponent>())
-            {
-                ref ButtonComponent button = ref _entity.Get<ButtonComponent>();
-                button.Update();
-            }
+                Button.Update(this);
         }
 
         internal void Draw()
         {
             if (_entity.Has<SpriteComponent>())
-            {
-                ref SpriteComponent sprite = ref _entity.Get<SpriteComponent>();
-                sprite.Draw();
-            }
+                Sprite.Draw(this);
 
             if (_entity.Has<AnimatedSpriteComponent>())
-            {
-                ref AnimatedSpriteComponent animatedSprite = ref _entity.Get<AnimatedSpriteComponent>();
-                animatedSprite.Draw();
-            }
+                AnimatedSprite.Draw(this);
 
             if (_entity.Has<TilemapComponent>())
-            {
-                ref TilemapComponent tilemap = ref _entity.Get<TilemapComponent>();
-                tilemap.Draw();
-            }
+                Tilemap.Draw(this);
         }
 
         internal void DrawUI()
         {
             if (_entity.Has<ButtonComponent>())
-            {
-                ref ButtonComponent button = ref _entity.Get<ButtonComponent>();
-                button.Draw();
-            }
+                Button.Draw(this);
 
             if (_entity.Has<LabelComponent>())
-            {
-                ref LabelComponent label = ref _entity.Get<LabelComponent>();
-                label.Draw();
-            }
+                Label.Draw(this);
         }
 
         public ref T GetComponent<T>() where T : struct
@@ -119,11 +97,5 @@ namespace Feev.Utils
         {
             return _entity.Has<T>();
         }
-
-        internal void TransformChanged(Vector2 position, float rotation, Vector2 scale)
-        {
-            OnTransformChanged?.Invoke(this, new TransformEventArgs(position, rotation, scale));
-        }
-
     }
 }

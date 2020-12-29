@@ -4,47 +4,19 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Feev.Graphics
 {
-    public class Sprite
+    static class Sprite
     {
-        public Texture2D Texture;
-        public Transform2D Transform;
-        public Vector2 Origin;
-        public Rectangle? SourceRectangle;
-
-        public Sprite(Texture2D texture, Transform2D transform, Vector2 origin)
-        {
-            Texture = texture;
-            Transform = transform;
-            Origin = origin;
-            SourceRectangle = null;
-        }
-
-        public Sprite(Texture2D texture, Transform2D transform, Vector2 origin, Rectangle? sourceRectangle)
-        {
-            Texture = texture;
-            Transform = transform;
-            Origin = origin;
-            SourceRectangle = sourceRectangle;
-        }
-
+        
         #region Draw
 
         /// <summary>
         /// Draws the sprite.
         /// </summary>
-        public void Draw()
+        public static void Draw(Entity entity)
         {
-            Draw(Color.White);
-        }
-
-        /// <summary>
-        /// Draws the sprite.
-        /// </summary>
-        /// <param name="colorMask">A color mask.</param>
-        public void Draw(Color colorMask)
-        {
-            Batch.Draw(Texture, Transform.Position, SourceRectangle, colorMask, Transform.Rotation, Origin, Transform.Scale, SpriteEffects.None, 0f);
-            //Globals.spriteBatch.Draw(Texture, Transform.Position, SourceRectangle, colorMask, Transform.Rotation, Origin, Transform.Scale, SpriteEffects.None, 0f);
+            TransformComponent transform = entity.GetComponent<TransformComponent>();
+            SpriteComponent sprite = entity.GetComponent<SpriteComponent>();
+            Batch.Draw(sprite.Texture, transform.Position, sprite.SourceRectangle, Color.White, transform.Rotation, sprite.Origin, transform.Scale, SpriteEffects.None, 0f);
         }
 
         #endregion

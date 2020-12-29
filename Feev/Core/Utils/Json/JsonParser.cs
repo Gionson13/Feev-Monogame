@@ -13,8 +13,6 @@ namespace Feev.Utils.Json
 
             JArray jsonMap = tilemap.map;
             JArray jsonTiles = tilemap.tiles;
-            float xPos = tilemap.position[0];
-            float yPos = tilemap.position[1];
 
             List<Tile> tiles = new List<Tile>();
 
@@ -35,7 +33,6 @@ namespace Feev.Utils.Json
             string spriteSheet = tilemap.spritesheet;
             int width = tilemap.tile_width;
             int height = tilemap.tile_height;
-            Vector2 position = new Vector2(xPos, yPos);
 
             return new JsonTilemapResult()
             {
@@ -43,7 +40,6 @@ namespace Feev.Utils.Json
                 Map = map,
                 SpriteSheet = spriteSheet,
                 Size = new Vector2(width, height),
-                Position = position,
             };
         }
     }

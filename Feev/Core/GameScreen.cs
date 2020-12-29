@@ -58,7 +58,7 @@ namespace Feev
             Batch.Begin();
 
             if (Globals.mainCamera != null)
-                Batch.BeginMode2D(Globals.mainCamera);
+                Batch.BeginMode2D((CameraComponent)Globals.mainCamera);
 
             foreach (Entity entity in Globals.entities)
                 entity.Draw();

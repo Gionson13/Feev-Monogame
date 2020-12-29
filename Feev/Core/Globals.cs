@@ -13,7 +13,7 @@ namespace Feev
         internal static List<PointLight> pointLights;
         internal static int maxLights = 20;
         internal static List<Entity> entities = new List<Entity>();
-        internal static Camera2D mainCamera = null;
+        internal static CameraComponent? mainCamera = null;
         internal static SpriteBatch spriteBatch;
         internal static bool shouldExit = false;
 

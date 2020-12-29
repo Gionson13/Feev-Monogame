@@ -144,7 +144,7 @@ namespace Feev.Graphics
         /// Begin drawing relative to a camera.
         /// </summary>
         /// <param name="camera">The camera.</param>
-        public static void BeginMode2D(Camera2D camera)
+        public static void BeginMode2D(CameraComponent camera)
         {
             Globals.spriteBatch.End();
 

@@ -1,4 +1,5 @@
 ﻿using Feev.Graphics;
+using Feev.Utils;
 using Feev.Utils.Json;
 using Feev.Utils.Xml;
 using Microsoft.Xna.Framework;
@@ -13,7 +14,7 @@ namespace Feev.Extension
 {
     public static class ContentExtension
     {
-        private static Dictionary<string, AnimatedSprite> _animatedSpriteCache = new Dictionary<string, AnimatedSprite>();
+        private static Dictionary<string, AnimatedSpriteComponent> _animatedSpriteCache = new Dictionary<string, AnimatedSpriteComponent>();
 
         /// <summary>
         /// Load an animated sprite.
@@ -21,7 +22,7 @@ namespace Feev.Extension
         /// <param name="content">The content manager.</param>
         /// <param name="filename">The name of the file.</param>
         /// <returns>An animated sprite.</returns>
-        public static AnimatedSprite LoadAnimatedSprite(this ContentManager content, string filename)
+        public static AnimatedSpriteComponent LoadAnimatedSprite(this ContentManager content, string filename)
         {
             string key = $"{content.RootDirectory}/{filename.Replace('\\', '/')}";
             if (_animatedSpriteCache.ContainsKey(key))
@@ -32,7 +33,8 @@ namespace Feev.Extension
 
             var xmlAnimations = XmlParser.ParseSpriteAnimation(xmlDocument);
 
-            AnimatedSprite result = new AnimatedSprite();
+            AnimatedSpriteComponent result = new AnimatedSpriteComponent();
+            result.animations = new Dictionary<string, SpriteAnimation>();
 
             foreach (var xmlAnimation in xmlAnimations)
             {
@@ -55,24 +57,10 @@ namespace Feev.Extension
                     FrameDuration = xmlAnimation.FrameDuration,
                     Frames = frames
                 };
-                result._animations.Add(xmlAnimation.Name, animation);
-                result._currentAnimation = result._animations.Values.ElementAt(0);
+                result.animations.Add(xmlAnimation.Name, animation);
+                result.currentAnimation = result.animations.Values.ElementAt(0);
             }
 
-            return result;
-        }
-
-        /// <summary>
-        /// Load an animated sprite.
-        /// </summary>
-        /// <param name="content">The content manager.</param>
-        /// <param name="filename">The name of the file.</param>
-        /// <param name="position">The position of the animated sprite.</param>
-        /// <returns>An animated sprite.</returns>
-        public static AnimatedSprite LoadAnimatedSprite(this ContentManager content, string filename, Vector2 position)
-        {
-            var result = LoadAnimatedSprite(content, filename);
-            result.Transform.Position = position;
             return result;
         }
 
@@ -82,14 +70,14 @@ namespace Feev.Extension
         /// <param name="content">The content manager.</param>
         /// <param name="filename">The name of the file.</param>
         /// <returns>A tilemap.</returns>
-        public static Tilemap LoadTilemap(this ContentManager content, string filename)
+        public static TilemapComponent LoadTilemap(this ContentManager content, string filename)
         {
             string json = File.ReadAllText($"{content.RootDirectory}/{filename}.json");
             JsonTilemapResult jsonTilemap = JsonParser.ParseTilemap(json);
 
             Texture2D spriteSheet = content.Load<Texture2D>(jsonTilemap.SpriteSheet);
 
-            return new Tilemap(spriteSheet, jsonTilemap.Position, jsonTilemap.Map, jsonTilemap.Tiles, jsonTilemap.Size);
+            return new TilemapComponent(spriteSheet, jsonTilemap.Map, jsonTilemap.Tiles, jsonTilemap.Size);
         }
     }
 }

@@ -1,10 +1,8 @@
 ﻿using Feev.Extension;
 using Feev.Graphics;
-using Feev.Graphics.UI;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Net.Http.Headers;
+using System.Collections.Generic;
 
 namespace Feev.Utils
 {
@@ -15,317 +13,226 @@ namespace Feev.Utils
 
     public struct TransformComponent
     {
-        internal Entity owner;
-
-        private Vector2 _position;
-        private float _rotation;
-        private Vector2 _scale;
-
-        public Vector2 Position
-        {
-            get { return _position; }
-            set { _position = value; owner.TransformChanged(_position, _rotation, _scale); }
-        }
-        public float Rotation
-        {
-            get { return _rotation; }
-            set { _rotation = value; owner.TransformChanged(_position, _rotation, _scale); }
-        }
-        public Vector2 Scale
-        {
-            get { return _scale; }
-            set { _scale = value; owner.TransformChanged(_position, _rotation, _scale); }
-        }
-
-        public void Set(Transform2D transform)
-        {
-            _position = transform.Position;
-            _rotation = transform.Rotation;
-            _scale = transform.Scale;
-            owner.TransformChanged(_position, _rotation, _scale);
-        }
+        public Vector2 Position;
+        public float Rotation;
+        public Vector2 Scale;
     }
 
     public struct SpriteComponent
     {
-        private Sprite _sprite;
-        internal Entity owner;
-
         #region public fiedlds
 
-        public Texture2D Texture { get { return _sprite.Texture; } set { _sprite.Texture = value; } }
-        public Vector2 Origin { get { return _sprite.Origin; } set { _sprite.Origin = value; } }
-        public Rectangle? SourceRectangle { get { return _sprite.SourceRectangle; } set { _sprite.SourceRectangle = value; } }
+        public Texture2D Texture;
+        public Vector2 Origin;
+        public Rectangle? SourceRectangle;
 
         #endregion
 
-        public SpriteComponent(Texture2D texture, Entity owner, Vector2 origin) : this(texture, owner, origin, null)
+        public SpriteComponent(Texture2D texture, Vector2 origin) : this(texture, origin, null)
         {
         }
 
-        public SpriteComponent(Texture2D texture, Entity owner, Vector2 origin, Rectangle? sourceRectangle)
+        public SpriteComponent(Texture2D texture, Vector2 origin, Rectangle? sourceRectangle)
         {
-            this.owner = owner;
-            var transform = this.owner.GetComponent<TransformComponent>();
-            _sprite = new Sprite(texture, new Transform2D(transform.Position, transform.Rotation, transform.Scale), origin, sourceRectangle);
-            this.owner.OnTransformChanged += Owner_OnTransformChanged;
-        }
-
-        #region Draw
-
-        /// <summary>
-        /// Draws the sprite.
-        /// </summary>
-        public void Draw() => _sprite.Draw(Color.White);
-
-        /// <summary>
-        /// Draws the sprite.
-        /// </summary>
-        /// <param name="colorMask">A color mask.</param>
-        public void Draw(Color colorMask) => _sprite.Draw(colorMask);
-
-        #endregion
-
-        private void Owner_OnTransformChanged(object source, TransformEventArgs e)
-        {
-            _sprite.Transform.Position = e.Position;
-            _sprite.Transform.Rotation = e.Rotation;
-            _sprite.Transform.Scale = e.Scale;
+            Texture = texture;
+            Origin = origin;
+            SourceRectangle = sourceRectangle;
         }
     }
 
     public struct AnimatedSpriteComponent
     {
-        internal Entity owner;
+        internal float elapsedTime;
+        internal int frameIndex;
+        public bool Paused;
 
-        private AnimatedSprite _animatedSprite;
+        internal SpriteAnimation currentAnimation;
+        internal Dictionary<string, SpriteAnimation> animations;
+        public Vector2 Origin;
 
-        public Vector2 Origin
+        public AnimatedSpriteComponent(string filename)
         {
-            get { return _animatedSprite.Origin; }
-            set { _animatedSprite.Origin = value; }
+            this = Globals.Content.LoadAnimatedSprite(filename);
         }
 
-        public AnimatedSpriteComponent(Entity owner, string filename)
+        /// <summary>
+        /// Play the specified animation.
+        /// </summary>
+        /// <param name="animation">The animation to play.</param>
+        /// <exception cref="KeyNotFoundException"/>
+        public void Play(string animation)
         {
-            this.owner = owner;
-            var transform = this.owner.GetComponent<TransformComponent>();
-            _animatedSprite = Globals.Content.LoadAnimatedSprite(filename);
-            _animatedSprite.Transform.Position = transform.Position;
-            _animatedSprite.Transform.Rotation = transform.Rotation;
-            _animatedSprite.Transform.Scale = transform.Scale;
+            if (animations.ContainsKey(animation))
+            {
+                currentAnimation = animations[animation];
+                elapsedTime = 0f;
+                frameIndex = 0;
+                Paused = false;
+            }
+            else
+                throw new KeyNotFoundException($"{animation} does not exist");
+        }
+        //         public void Pause() => _animatedSprite.Pause();
+        //         public void Resume() => _animatedSprite.Resume();
 
-            this.owner.OnTransformChanged += Owner_OnTransformChanged;
+        #region Overrides
+
+        public override string ToString()
+        {
+            string result = "{";
+
+            foreach (var item in animations)
+                result += $"{{Name: {item.Key}, Animation: {item.Value}}}, ";
+
+            result = result.Substring(0, result.Length - 2);
+            result += "}";
+            return result;
         }
 
-        public void Update() => _animatedSprite.Update();
-
-        public void Draw() => _animatedSprite.Draw(Color.White);
-        public void Draw(Color colorMask) => _animatedSprite.Draw(colorMask);
-
-        public void Play(string animation) => _animatedSprite.Play(animation);
-        public void Pause() => _animatedSprite.Pause();
-        public void Resume() => _animatedSprite.Resume();
-
-        private void Owner_OnTransformChanged(object source, TransformEventArgs e)
-        {
-            _animatedSprite.Transform.Position = e.Position;
-            _animatedSprite.Transform.Rotation = e.Rotation;
-            _animatedSprite.Transform.Scale = e.Scale;
-        }
+        #endregion
     }
 
     public struct CameraComponent
     {
+        public bool PixelPerfect;
+        public Vector2 Origin;
         internal Entity owner;
-        internal Camera2D camera;
 
-        public bool PixelPerfect
-        {
-            get { return camera.PixelPerfect; }
-            set { camera.PixelPerfect = value; }
-        }
-
-        public Vector2 Origin
-        {
-            get { return camera.Origin; }
-            set { camera.Origin = value; }
-        }
         public Rectangle Bounds
         {
-            get { return camera.Bounds; }
+            get
+            {
+                Vector2 viewPortCorner = ScreenToWorld(new Vector2(0, 0));
+                Vector2 viewPortBottomCorner = ScreenToWorld(new Vector2(Globals.Graphics.GraphicsDevice.Viewport.Width,
+                    Globals.Graphics.GraphicsDevice.Viewport.Height));
+
+                return new Rectangle(viewPortCorner.ToPoint(), (viewPortBottomCorner - viewPortCorner).ToPoint());
+            }
         }
 
-        public CameraComponent(Entity owner) : this(owner, 1f)
+        public Matrix TranslationMatrix
         {
+            get
+            {
+                TransformComponent transform = owner.GetComponent<TransformComponent>();
+
+                if (PixelPerfect)
+                    return Matrix.CreateTranslation(new Vector3((int)-transform.Position.X, (int)-transform.Position.Y, 0)) *
+                        Matrix.CreateRotationZ(transform.Rotation) *
+                        Matrix.CreateScale(new Vector3(transform.Scale, 1)) *
+                        Matrix.CreateTranslation(new Vector3(Origin, 0));
+                else
+                    return Matrix.CreateTranslation(new Vector3(-transform.Position, 0)) *
+                        Matrix.CreateRotationZ(transform.Rotation) *
+                        Matrix.CreateScale(new Vector3(transform.Scale, 1)) *
+                        Matrix.CreateTranslation(new Vector3(Origin, 0));
+            }
         }
 
-        public CameraComponent(Entity owner, float zoom)
+        public CameraComponent(Entity owner)
         {
             this.owner = owner;
-            var tranform = this.owner.GetComponent<TransformComponent>();
-            camera = new Camera2D(tranform.Position, tranform.Rotation, zoom);
-            this.owner.OnTransformChanged += Owner_OnTransformChanged;
+            Origin = new Vector2(Globals.GraphicsDevice.Viewport.Width / 2, Globals.GraphicsDevice.Viewport.Height / 2);
+            PixelPerfect = false;
         }
 
-        public CameraComponent(Entity owner, float zoom, Vector2 origin)
+        public CameraComponent(Entity owner, Vector2 origin)
         {
             this.owner = owner;
-            var tranform = this.owner.GetComponent<TransformComponent>();
-            camera = new Camera2D(tranform.Position, tranform.Rotation, zoom, origin);
-            this.owner.OnTransformChanged += Owner_OnTransformChanged;
+            Origin = origin;
+            PixelPerfect = false;
         }
 
-        public void SetAsMainCamera() => Globals.mainCamera = camera;
+        public CameraComponent(Entity owner, Vector2 origin, bool pixelPerfect)
+        {
+            this.owner = owner;
+            Origin = origin;
+            PixelPerfect = pixelPerfect;
+        }
+
+        public void SetAsMainCamera() => Globals.mainCamera = this;
 
         public Vector2 ScreenToWorld(Vector2 pixel)
         {
-            return camera.ScreenToWorld(pixel);
+            return Vector2.Transform(pixel, Matrix.Invert(TranslationMatrix));
         }
 
         public Vector2 WorldToScreen(Vector2 worldPosition)
         {
-            return camera.WorldToScreen(worldPosition);
-        }
-
-        private void Owner_OnTransformChanged(object source, TransformEventArgs e)
-        {
-            camera.Position = e.Position;
-            camera.Rotation = e.Rotation;
-            camera.Scale = e.Scale;
+            return Vector2.Transform(worldPosition, TranslationMatrix);
         }
     }
 
     public struct ScriptComponent
     {
-        private Entity _owner;
-        private ScriptableEntity _script;
+        internal ScriptableEntity script;
 
-        public ScriptComponent(Entity owner)
+        public void Bind<T>(Entity entity) where T : ScriptableEntity, new()
         {
-            _owner = owner;
-            _script = new ScriptableEntity();
+            script = new T();
+            script.owner = entity;
+            script.OnInitialize();
         }
 
-        internal void Update() => _script.OnUpdate();
-
-        public void Bind<T>() where T : ScriptableEntity, new()
-        {
-            _script = new T();
-            _script.owner = _owner;
-            _script.OnInitialize();
-        }
     }
 
     public struct TilemapComponent
     {
-        private Tilemap _tilemap;
+        internal readonly Texture2D spriteSheet;
+        internal Vector2 tileSize;
+        public List<Tile> Tiles;
+        public int[][] Map;
+
+        internal TilemapComponent(Texture2D spriteSheet, int[][] map, List<Tile> tiles, Vector2 tileSize)
+        {
+            this.spriteSheet = spriteSheet;
+            this.tileSize = tileSize;
+
+            Tiles = tiles;
+            Map = map;
+        }
 
         public TilemapComponent(string tilemapFilename)
         {
-            _tilemap = Globals.Content.LoadTilemap(tilemapFilename);
+            this = Globals.Content.LoadTilemap(tilemapFilename);
         }
-
-        public void Draw() => _tilemap.Draw();
     }
 
     // UI -----------------------------------------------------------------------
 
     public struct ButtonComponent
     {
-        internal Entity owner;
+        public Texture2D Normal;
+        public Texture2D Hover;
+        public Texture2D Pressed;
 
-        private Button _button;
+        public bool IsPressed;
 
-        public Texture2D Normal
-        {
-            get { return _button.Normal; }
-            set { _button.Normal = value; }
-        }
-        public Texture2D Hover
-        {
-            get { return _button.Hover; }
-            set { _button.Hover = value; }
-        }
-        public Texture2D Pressed
-        {
-            get { return _button.Pressed; }
-            set { _button.Pressed = value; }
-        }
+        internal Texture2D currentTexture;
 
-        public event EventHandler OnClick
+        public ButtonComponent(Texture2D normal, Texture2D hover, Texture2D pressed)
         {
-            add { _button.OnClick += value; }
-            remove { _button.OnClick -= value; }
+            Normal = normal;
+            Hover = hover;
+            Pressed = pressed;
+            currentTexture = normal;
+            IsPressed = false;
         }
-
-        public event EventHandler OnReleased
-        {
-            add { _button.OnReleased += value; }
-            remove { _button.OnReleased -= value; }
-        }
-
-        public ButtonComponent(Entity owner, Texture2D normal, Texture2D hover, Texture2D pressed)
-        {
-            this.owner = owner;
-            _button = new Button(normal, hover, pressed);
-            this.owner.OnTransformChanged += Owner_OnTransformChanged;
-        }
-
-        private void Owner_OnTransformChanged(object source, TransformEventArgs e)
-        {
-            _button.Position = e.Position;
-            _button.Rotation = e.Rotation;
-            _button.Scale = e.Scale;
-        }
-
-        internal void Update() => _button.Update();
-        internal void Draw() => _button.Draw();
     }
 
     public struct LabelComponent
     {
-        internal Entity owner;
-        private Label _label;
+        public Color Color;
+        public SpriteFont Font;
+        public string Text;
+        public Vector2 Origin;
 
-        public Color Color
+        public LabelComponent(string text, SpriteFont font)
         {
-            get { return _label.Color; }
-            set { _label.Color = value; }
+            Text = text;
+            Font = font;
+            Color = Color.White;
+            Origin = Vector2.Zero;
         }
-
-        public SpriteFont Font
-        {
-            get { return _label.Font; }
-            set { _label.Font = value; }
-        }
-
-        public string Text
-        {
-            get { return _label.Text; }
-            set { _label.Text = value; }
-        }
-
-        public Vector2 Origin
-        {
-            get { return _label.Origin; }
-            set { _label.Origin = value; }
-        }
-
-        public LabelComponent(Entity owner, string text, SpriteFont font)
-        {
-            this.owner = owner;
-            _label = new Label(text, font, Color.White);
-            this.owner.OnTransformChanged += Owner_OnTransformChanged;
-        }
-
-        private void Owner_OnTransformChanged(object source, TransformEventArgs e)
-        {
-            _label.Position = e.Position;
-            _label.Rotation = e.Rotation;
-            _label.Scale = e.Scale;
-        }
-
-        internal void Draw() => _label.Draw();
     }
 }

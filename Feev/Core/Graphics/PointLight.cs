@@ -65,38 +65,22 @@ namespace Feev.Graphics
         /// </summary>
         /// <param name="renderTarget">The render target to draw on.</param>
         /// <param name="camera">A camera.</param>
-        public static void Draw(RenderTarget2D renderTarget, Camera2D camera)
-        {
-            InitializeDraw(out Vector2[] positions, out Vector4[] colors, out float[] radiuses);
-
-            for (int i = 0; i < positions.Length; i++)
-            {
-                positions[i] = camera.WorldToScreen(Globals.pointLights[i].Position);
-                colors[i] = Globals.pointLights[i].Color.ToVector4();
-                radiuses[i] = Globals.pointLights[i].Radius * camera.Scale.X;
-            }
-
-            Draw(renderTarget, colors, positions, radiuses);
-        }
-
-        /// <summary>
-        /// Draws the light on top of a renderTarget. (Draws the result on screen).
-        /// </summary>
-        /// <param name="renderTarget">The render target to draw on.</param>
-        /// <param name="camera">A camera.</param>
         public static void Draw(RenderTarget2D renderTarget, CameraComponent camera)
         {
             InitializeDraw(out Vector2[] positions, out Vector4[] colors, out float[] radiuses);
 
+            TransformComponent cameraTransform = camera.owner.GetComponent<TransformComponent>();
+
             for (int i = 0; i < positions.Length; i++)
             {
                 positions[i] = camera.WorldToScreen(Globals.pointLights[i].Position);
                 colors[i] = Globals.pointLights[i].Color.ToVector4();
-                radiuses[i] = Globals.pointLights[i].Radius * camera.camera.Scale.X;
+                radiuses[i] = Globals.pointLights[i].Radius * cameraTransform.Scale.X;
             }
 
             Draw(renderTarget, colors, positions, radiuses);
         }
+
 
         private static void Draw(RenderTarget2D renderTarget, Vector4[] colors, Vector2[] positions, float[] radiuses)
         {

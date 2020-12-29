@@ -1,45 +1,24 @@
 ﻿using Feev.Utils;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace Feev.Graphics
 {
-    public class Tilemap
+    static class Tilemap
     {
-        private readonly Texture2D _spriteSheet;
-        private Vector2 _tileSize;
-
-        public List<Tile> Tiles;
-        public Vector2 Position;
-        public int[][] Map;
-
-        public Tilemap(Texture2D spriteSheet, Vector2 position, int[][] map, List<Tile> tiles, Vector2 tileSize)
+        public static void Draw(Entity entity)
         {
-            _spriteSheet = spriteSheet;
-            _tileSize = tileSize;
+            TransformComponent transform = entity.GetComponent<TransformComponent>();
+            TilemapComponent tilemap = entity.GetComponent<TilemapComponent>();
 
-            Tiles = tiles;
-            Position = position;
-            Map = map;
-        }
-
-        public void Draw()
-        {
-            Draw(Color.White);
-        }
-
-        public void Draw(Color coloMask)
-        {
-            for(int y = 0; y < Map.Length; y++)
+            for (int y = 0; y < tilemap.Map.Length; y++)
             {
-                for(int x = 0; x < Map[y].Length; x++)
+                for (int x = 0; x < tilemap.Map[y].Length; x++)
                 {
-                    if (Map[y][x] == 0)
+                    if (tilemap.Map[y][x] == 0)
                         continue;
 
-                    Batch.Draw(_spriteSheet, new Vector2(x, y) * _tileSize + Position, Tiles.First(tile => tile.Id == Map[y][x]).SourceRectangle, coloMask);
+                    Batch.Draw(tilemap.spriteSheet, new Vector2(x, y) * tilemap.tileSize * transform.Scale + transform.Position, tilemap.Tiles.First(tile => tile.Id == tilemap.Map[y][x]).SourceRectangle, Color.White);
                 }
             }
         }

@@ -9,6 +9,5 @@ namespace Feev.Utils.Json
         public string SpriteSheet;
         public int[][] Map;
         public Vector2 Size;
-        public Vector2 Position;
     }
 }
